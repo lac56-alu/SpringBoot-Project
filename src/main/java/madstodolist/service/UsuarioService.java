@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,14 +62,7 @@ public class UsuarioService {
         return usuarioRepository.findById(usuarioId).orElse(null);
     }
     @Transactional(readOnly = true)
-    public List<Tarea> allUsuarios() {
-        logger.debug("Devolviendo todos los usuarios ");
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
-        if (usuario == null) {
-            throw new TareaServiceException("Usuario " + idUsuario + " no existe al listar tareas ");
-        }
-        List<Tarea> tareas = new ArrayList(usuario.getTareas());
-        Collections.sort(tareas, (a, b) -> a.getId() < b.getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
-        return tareas;
+    public List<Usuario>findAll() {
+        return (List<Usuario>) usuarioRepository.findAll();
     }
 }

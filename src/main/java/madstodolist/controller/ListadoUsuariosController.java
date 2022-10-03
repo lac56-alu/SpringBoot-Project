@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class ListadoUsuariosController {
 
+    @Autowired
+    UsuarioService usuarioService;
     @GetMapping("/registrados")
     public String listadoUsuarios(Model model){
-        return "";
+        List<Usuario> usuarios = usuarioService.findAll();
+        model.addAttribute("usuarios",usuarios);
+        return "listaUsuarios";
     }
 }
