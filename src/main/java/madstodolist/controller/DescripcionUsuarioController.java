@@ -15,7 +15,7 @@ public class DescripcionUsuarioController {
     @GetMapping("/registrados/{id}")
     public String descripcionUsuario(@PathVariable(value="id") Long idUsuario,Model model){
         Usuario usuario = usuarioService.findById(idUsuario);
-        model.addAttribute("usuarios",usuario);
+        model.addAttribute("usuario",usuario);
         return "";
     }
 }
