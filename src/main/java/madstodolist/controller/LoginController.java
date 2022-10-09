@@ -59,6 +59,7 @@ public class LoginController {
 
     @GetMapping("/registro")
     public String registroForm(Model model) {
+        model.addAttribute("admin",usuarioService.hayAdministrador());
         model.addAttribute("registroData", new RegistroData());
         return "formRegistro";
     }
