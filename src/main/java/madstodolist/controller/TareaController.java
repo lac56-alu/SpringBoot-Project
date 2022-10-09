@@ -68,6 +68,7 @@ public class TareaController {
         List<Tarea> tareas = tareaService.allTareasUsuario(idUsuario);
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(idUsuario));
         return "listaTareas";
     }
 

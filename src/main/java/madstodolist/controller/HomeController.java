@@ -23,6 +23,7 @@ public class HomeController {
         else{
             Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
             model.addAttribute("usuario", usuario);
+            model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
             return "about";
         }
     }
