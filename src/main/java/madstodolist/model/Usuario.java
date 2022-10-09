@@ -21,6 +21,7 @@ public class Usuario implements Serializable {
     private String email;
     private String nombre;
     private String password;
+    private boolean administrador;
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
@@ -66,6 +67,12 @@ public class Usuario implements Serializable {
         this.nombre = nombre;
     }
 
+    public boolean getAdministrador(){
+        return administrador;
+    }
+    public void setAdministrador(boolean administrador){
+        this.administrador = administrador;
+    }
     public String getPassword() {
         return password;
     }
