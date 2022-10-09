@@ -65,4 +65,15 @@ public class UsuarioService {
     public List<Usuario>findAll() {
         return (List<Usuario>) usuarioRepository.findAll();
     }
+    @Transactional(readOnly = true)
+    public boolean hayAdministrador(){
+        List<Usuario> users = findAll();
+        boolean hayadmin=false;
+        for(int i=0;i<users.size() && hayadmin == false;i++){
+            if(users.get(i).getAdministrador()==true){
+                hayadmin = true;
+            }
+        }
+        return hayadmin;
+    }
 }

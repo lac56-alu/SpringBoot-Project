@@ -1,5 +1,6 @@
 package madstodolist.controller;
 
+import madstodolist.authentication.ManagerUserSession;
 import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,14 @@ import java.util.List;
 public class DescripcionUsuarioController {
     @Autowired
     UsuarioService usuarioService;
+    @Autowired
+    ManagerUserSession managerUserSession;
     @GetMapping("/registrados/{id}")
     public String descripcionUsuario(@PathVariable(value="id") Long idUsuario,Model model){
-        Usuario usuario = usuarioService.findById(idUsuario);
-        model.addAttribute("usuario",usuario);
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+        Usuario user = usuarioService.findById(idUsuario);
+        model.addAttribute("user",user);
         return "descripcionUsuario";
     }
 }

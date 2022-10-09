@@ -22,10 +22,14 @@ public class ListadoUsuariosController {
 
     @Autowired
     UsuarioService usuarioService;
+    @Autowired
+    ManagerUserSession managerUserSession;
     @GetMapping("/registrados")
     public String listadoUsuarios(Model model){
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
         List<Usuario> usuarios = usuarioService.findAll();
         model.addAttribute("usuarios",usuarios);
+        model.addAttribute("usuario", usuario);
         return "listaUsuarios";
     }
 }
