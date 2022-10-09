@@ -76,4 +76,15 @@ public class UsuarioService {
         }
         return hayadmin;
     }
+    @Transactional(readOnly = true)
+    public Long devolverIDAdministrador(){
+        Long id = -1L;
+        List<Usuario>users = findAll();
+        for(int i=0;i< users.size() && id==-1L;i++){
+            if(users.get(i).getAdministrador()==true){
+                id = users.get(i).getId();
+            }
+        }
+        return id;
+    }
 }

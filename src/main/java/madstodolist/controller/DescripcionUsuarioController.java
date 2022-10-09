@@ -1,6 +1,7 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSession;
+import madstodolist.controller.exception.UsuarioNoAdminException;
 import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,18 @@ public class DescripcionUsuarioController {
     UsuarioService usuarioService;
     @Autowired
     ManagerUserSession managerUserSession;
+    private void comprobarUsuarioAdmin(Long idUsuario) {
+        Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
+        if (!idUsuario.equals(idUsuarioLogeado))
+            throw new UsuarioNoAdminException();
+    }
+    private Long getIdAdministrador(){
+        return usuarioService.devolverIDAdministrador();
+    }
     @GetMapping("/registrados/{id}")
     public String descripcionUsuario(@PathVariable(value="id") Long idUsuario,Model model){
+        Long idAdmin = getIdAdministrador();
+        comprobarUsuarioAdmin(idAdmin);
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
         model.addAttribute("usuario", usuario);
         Usuario user = usuarioService.findById(idUsuario);

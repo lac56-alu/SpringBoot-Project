@@ -1,6 +1,7 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSession;
+import madstodolist.controller.exception.UsuarioNoAdminException;
 import madstodolist.model.Usuario;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
@@ -24,8 +25,19 @@ public class ListadoUsuariosController {
     UsuarioService usuarioService;
     @Autowired
     ManagerUserSession managerUserSession;
+
+    private void comprobarUsuarioAdmin(Long idUsuario) {
+        Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
+        if (!idUsuario.equals(idUsuarioLogeado))
+            throw new UsuarioNoAdminException();
+    }
+    private Long getIdAdministrador(){
+        return usuarioService.devolverIDAdministrador();
+    }
     @GetMapping("/registrados")
     public String listadoUsuarios(Model model){
+        Long idAdmin = getIdAdministrador();
+        comprobarUsuarioAdmin(idAdmin);
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
         List<Usuario> usuarios = usuarioService.findAll();
         model.addAttribute("usuarios",usuarios);
