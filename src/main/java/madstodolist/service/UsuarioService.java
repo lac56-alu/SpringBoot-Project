@@ -87,4 +87,9 @@ public class UsuarioService {
         }
         return id;
     }
+    @Transactional(readOnly = true)
+    public boolean soyAdministrador(Long id){
+        Usuario user = findById(id);
+        return user.getAdministrador();
+    }
 }
