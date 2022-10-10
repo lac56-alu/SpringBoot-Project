@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UsuarioService {
@@ -64,6 +61,17 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public List<Usuario>findAll() {
         return (List<Usuario>) usuarioRepository.findAll();
+    }
+    @Transactional(readOnly = true)
+    public List<Usuario>findAllMenosLogueado(){
+        List<Usuario>usuarios = findAll();
+        List<Usuario>users = new ArrayList<>();
+        for(int i=0;i<usuarios.size();i++){
+            if(usuarios.get(i).getAdministrador()==false){
+                users.add(usuarios.get(i));
+            }
+        }
+        return users;
     }
     @Transactional(readOnly = true)
     public boolean hayAdministrador(){

@@ -40,7 +40,7 @@ public class ListadoUsuariosController {
         Long idAdmin = getIdAdministrador();
         comprobarUsuarioAdmin(idAdmin);
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
-        List<Usuario> usuarios = usuarioService.findAll();
+        List<Usuario> usuarios = usuarioService.findAllMenosLogueado();
         model.addAttribute("usuarios",usuarios);
         model.addAttribute("usuario", usuario);
         return "listaUsuarios";
