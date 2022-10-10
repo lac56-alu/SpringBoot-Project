@@ -62,7 +62,10 @@
                     <td th:text="${user.email}"></td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/registrados/{id}(id=${user.id})}"/>Ver descripcion</a></td>
                     <td><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'bloq(\'/registrados/' + ${user.id} + '\')'">Bloquear</button></td>
+                                th:onclick="'bloq(\'/registrados/' + ${user.id} + '\')'">Bloquear</button>
+                        <button class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
+                                th:onclick="'habilit(\'/registrados/' + ${user.id} + '\')'">Habilitar</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -88,6 +91,13 @@
         if (confirm('¿Estás seguro/a de que quieres bloquear el usuario?')) {
             fetch(urlBloquear, {
                 method: 'PUT'
+            }).then((res) => location.reload());
+        }
+    }
+    function habilit(urlHabilitar) {
+        if (confirm('¿Estás seguro/a de que quieres habilitar el acceso al usuario?')) {
+            fetch(urlHabilitar, {
+                method: 'POST'
             }).then((res) => location.reload());
         }
     }

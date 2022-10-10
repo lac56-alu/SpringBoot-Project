@@ -58,4 +58,18 @@ public class ListadoUsuariosController {
         usuarioService.bloquearUsuario(idUsuario);
         return "";
     }
+    @PostMapping("/registrados/{id}")
+    @ResponseBody
+    // La anotación @ResponseBody sirve para que la cadena devuelta sea la resupuesta
+    // de la petición HTTP, en lugar de una plantilla thymeleaf
+    public String habilitarUsuario(@PathVariable(value="id") Long idUsuario, RedirectAttributes flash, HttpSession session) {
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
+        usuarioService.habiliarUsuario(idUsuario);
+        return "";
+    }
+
 }
