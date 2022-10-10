@@ -61,9 +61,9 @@
                     <td th:text="${user.id}"></td>
                     <td th:text="${user.email}"></td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/registrados/{id}(id=${user.id})}"/>Ver descripcion</a></td>
-                    <td><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                    <td><button th:if="${user.acceso}" class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'bloq(\'/registrados/' + ${user.id} + '\')'">Bloquear</button>
-                        <button class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
+                        <button th:if="${!user.acceso}" class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'habilit(\'/registrados/' + ${user.id} + '\')'">Habilitar</button>
                     </td>
                 </tr>
