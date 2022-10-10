@@ -92,4 +92,14 @@ public class UsuarioService {
         Usuario user = findById(id);
         return user.getAdministrador();
     }
+    @Transactional(readOnly = false)
+    public void bloquearUsuario(Long id){
+        Usuario us = findById(id);
+        us.setAcceso(false);
+    }
+    @Transactional(readOnly = false)
+    public void habiliarUsuario(Long id){
+        Usuario us = findById(id);
+        us.setAcceso(true);
+    }
 }

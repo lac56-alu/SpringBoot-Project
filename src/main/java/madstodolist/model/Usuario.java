@@ -22,7 +22,7 @@ public class Usuario implements Serializable {
     private String nombre;
     private String password;
     private boolean administrador;
-    private boolean acceso = true;
+    private boolean acceso;
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;

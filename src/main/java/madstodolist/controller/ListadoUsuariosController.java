@@ -55,8 +55,7 @@ public class ListadoUsuariosController {
             throw new UsuarioNotFoundException();
         }
         comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
-
-        tareaService.borraTarea(idTarea);
+        usuarioService.bloquearUsuario(idUsuario);
         return "";
     }
 }
