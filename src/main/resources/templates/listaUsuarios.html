@@ -53,6 +53,7 @@
                     <th>Id</th>
                     <th>Correo electronico</th>
                     <th>Enlace Descripcion</th>
+                    <th>Acceso</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,6 +61,8 @@
                     <td th:text="${user.id}"></td>
                     <td th:text="${user.email}"></td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/registrados/{id}(id=${user.id})}"/>Ver descripcion</a></td>
+                    <td><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                th:onclick="'bloq(\'/registrados/' + ${user.id} + '\')'">Bloquear</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -80,5 +83,14 @@
 
 </div>
 <div th:replace="fragments::javascript"/>
+<script type="text/javascript">
+    function bloq(urlBloquear) {
+        if (confirm('¿Estás seguro/a de que quieres bloquear el usuario?')) {
+            fetch(urlBloquear, {
+                method: 'PUT'
+            }).then((res) => location.reload());
+        }
+    }
+</script>
 </body>
 </html>
