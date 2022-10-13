@@ -58,6 +58,9 @@ public class LoginController {
         } else if (loginStatus == UsuarioService.LoginStatus.ERROR_PASSWORD) {
             model.addAttribute("error", "Contraseña incorrecta");
             return "formLogin";
+        } else if (loginStatus == UsuarioService.LoginStatus.ERROR_BLOQUEADO){
+            model.addAttribute("error","El usuario esta bloqueado");
+            return "formLogin";
         }
         return "formLogin";
     }
@@ -87,6 +90,7 @@ public class LoginController {
         usuario.setFechaNacimiento(registroData.getFechaNacimiento());
         usuario.setNombre(registroData.getNombre());
         usuario.setAdministrador(registroData.getAdministrador());
+        usuario.setAcceso(true);
         usuarioService.registrar(usuario);
         return "redirect:/login";
    }

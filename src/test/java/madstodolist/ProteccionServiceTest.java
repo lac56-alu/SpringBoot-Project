@@ -9,6 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @SpringBootTest
@@ -23,6 +24,6 @@ public class ProteccionServiceTest {
         admin.setAdministrador(true);
         admin.setPassword("admin");
         usuarioService.registrar(admin);
-        assertEquals(1L,usuarioService.devolverIDAdministrador());
+        assertEquals(admin.getId(),usuarioService.devolverIDAdministrador());
     }
 }

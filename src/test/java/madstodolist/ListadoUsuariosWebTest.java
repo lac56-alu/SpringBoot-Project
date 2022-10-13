@@ -36,7 +36,9 @@ public class ListadoUsuariosWebTest {
     public void listaUsers()throws Exception{
         Usuario us = new Usuario("user@ua");
         us.setPassword("123");
+        us.setAdministrador(true);
         us = usuarioService.registrar(us);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
         Usuario us2 = new Usuario("prueba01@ua");
         us2.setPassword("123");
         us2 = usuarioService.registrar(us2);

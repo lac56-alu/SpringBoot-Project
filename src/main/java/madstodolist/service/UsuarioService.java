@@ -10,17 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UsuarioService {
 
     Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
-    public enum LoginStatus {LOGIN_OK, USER_NOT_FOUND, ERROR_PASSWORD}
+    public enum LoginStatus {LOGIN_OK, USER_NOT_FOUND, ERROR_PASSWORD, ERROR_BLOQUEADO}
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -32,7 +29,9 @@ public class UsuarioService {
             return LoginStatus.USER_NOT_FOUND;
         } else if (!usuario.get().getPassword().equals(password)) {
             return LoginStatus.ERROR_PASSWORD;
-        } else {
+        } else if(usuario.get().getAcceso()==false){
+            return LoginStatus.ERROR_BLOQUEADO;
+        }else {
             return LoginStatus.LOGIN_OK;
         }
     }
@@ -66,6 +65,17 @@ public class UsuarioService {
         return (List<Usuario>) usuarioRepository.findAll();
     }
     @Transactional(readOnly = true)
+    public List<Usuario>findAllMenosLogueado(){
+        List<Usuario>usuarios = findAll();
+        List<Usuario>users = new ArrayList<>();
+        for(int i=0;i<usuarios.size();i++){
+            if(usuarios.get(i).getAdministrador()==false){
+                users.add(usuarios.get(i));
+            }
+        }
+        return users;
+    }
+    @Transactional(readOnly = true)
     public boolean hayAdministrador(){
         List<Usuario> users = findAll();
         boolean hayadmin=false;
@@ -88,8 +98,18 @@ public class UsuarioService {
         return id;
     }
     @Transactional(readOnly = true)
-    public boolean soyAdministrador(Long id){
+    public boolean soyAdministrador(Long id) {
         Usuario user = findById(id);
         return user.getAdministrador();
+    }
+    @Transactional(readOnly = false)
+    public void bloquearUsuario(Long id){
+        Usuario us = findById(id);
+        us.setAcceso(false);
+    }
+    @Transactional(readOnly = false)
+    public void habiliarUsuario(Long id){
+        Usuario us = findById(id);
+        us.setAcceso(true);
     }
 }
