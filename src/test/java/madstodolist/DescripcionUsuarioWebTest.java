@@ -44,8 +44,9 @@ public class DescripcionUsuarioWebTest {
         user.setNombre("user");
         Date fecha = new Date(2000-1900,03,17);
         user.setFechaNacimiento(fecha);
+        user.setAdministrador(true);
         user = usuarioService.registrar(user);
-
+        when(managerUserSession.usuarioLogeado()).thenReturn(user.getId());
         String url = "/registrados/"+user.getId();
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
