@@ -64,10 +64,10 @@
                     <td th:text="${equipo.id}"></td>
                     <td th:text="${equipo.nombre}"></td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}(id=${equipo.id})}"/>Ver miembros</a></td>
-                    <td><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                                               th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')">Eliminarme</button>
-                        <button class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'meterme(\'/equipos/' + ${equipo.id} + '\')">Añadirme</button>
+                    <td><button th:if="${pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                                               th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')'">Eliminarme</button>
+                        <button th:if="${!pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
+                                th:onclick="'meterme(\'/equipos/' + ${equipo.id} + '\')'">Añadirme</button>
                     </td>
                 </tr>
                 </tbody>

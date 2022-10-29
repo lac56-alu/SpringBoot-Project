@@ -56,6 +56,17 @@ public class EquipoService {
         equipo.addUsuario(usuario);
     }
     @Transactional(readOnly = true)
+    public boolean searchUsuarioEquipo(Long idU,Long idE){
+        boolean encontrado=false;
+        List<Usuario>users = usuariosEquipo(idE);
+        for(int i=0;i<users.size()&&encontrado==false;i++){
+            if(users.get(i).getId()==idU){
+                encontrado = true;
+            }
+        }
+        return encontrado;
+    }
+    @Transactional(readOnly = true)
     public List<Usuario>usuariosEquipo(Long idE){
         Equipo eq = this.recuperarEquipo(idE);
         List<Usuario> users = new ArrayList<>(eq.getUsuarios());

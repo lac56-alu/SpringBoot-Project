@@ -30,6 +30,9 @@ public class EquiposController {
         if (!idUsuario.equals(idUsuarioLogeado))
             throw new UsuarioNoLogeadoException();
     }
+    public boolean pertenezcoAlEquipo(Long idU,Long idE){
+        return equipoService.searchUsuarioEquipo(idU,idE);
+    }
     @GetMapping("/equipos")
     public String listadoEquipos(Model model){
         //la primera linea para proteger el listado de equipos
@@ -39,6 +42,7 @@ public class EquiposController {
         model.addAttribute("equipos",equipos);
         model.addAttribute("usuario", usuario);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        model.addAttribute("pertenecer",this);
         return "listaEquipos";
     }
     @GetMapping("/equipos/{id}")
