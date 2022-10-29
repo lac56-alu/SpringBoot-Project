@@ -7,12 +7,14 @@ import madstodolist.model.Usuario;
 import madstodolist.service.EquipoService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
+@Controller
 public class EquiposController {
     @Autowired
     EquipoService equipoService;
@@ -22,6 +24,8 @@ public class EquiposController {
     ManagerUserSession managerUserSession;
     private void comprobarUsuarioLogeado(Long idUsuario) {
         Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
+        if(idUsuarioLogeado == null)
+            throw new UsuarioNoLogeadoException();
         if (!idUsuario.equals(idUsuarioLogeado))
             throw new UsuarioNoLogeadoException();
     }
@@ -33,6 +37,7 @@ public class EquiposController {
         List<Equipo> equipos = equipoService.findAllOrderedByName();
         model.addAttribute("equipos",equipos);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "listaEquipos";
     }
     @GetMapping("/equipos/{id}")
@@ -42,7 +47,9 @@ public class EquiposController {
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
         model.addAttribute("usuario", usuario);
         Equipo equipo = equipoService.findById(idEquipo);
-        model.addAttribute("equipo",equipo);
+        List<Usuario> users = equipoService.usuariosEquipo(equipo.getId());
+        model.addAttribute("users",users);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "miembrosEquipo";
     }
 }
