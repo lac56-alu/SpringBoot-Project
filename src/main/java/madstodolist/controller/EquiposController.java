@@ -9,8 +9,7 @@ import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,5 +50,16 @@ public class EquiposController {
         model.addAttribute("users",users);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "miembrosEquipo";
+    }
+    @PostMapping("/equipos/{id}")
+    @ResponseBody
+    public String meterme(Model model){
+
+        return "";
+    }
+    @DeleteMapping("/equipos/{id}")
+    public String eliminarme(Model model){
+        
+        return "";
     }
 }
