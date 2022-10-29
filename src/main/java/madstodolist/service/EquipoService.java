@@ -41,6 +41,10 @@ public class EquipoService {
         );
         return equipos;
     }
+    @Transactional(readOnly = true)
+    public Equipo findById(Long id){
+        return equipoRepository.findById(id).orElse(null);
+    }
     @Transactional
     public void addUsuarioEquipo(Long idU,Long idE){
         Equipo equipo = this.recuperarEquipo(idE);
