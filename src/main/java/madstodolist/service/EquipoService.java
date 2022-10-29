@@ -57,4 +57,10 @@ public class EquipoService {
         List<Usuario> users = new ArrayList<>(eq.getUsuarios());
         return users;
     }
+    @Transactional
+    public void deleteUsuarioEquipo(Long idU,Long idE){
+        Equipo equipo = this.recuperarEquipo(idE);
+        Usuario usuario = usuarioService.findById(idU);
+        equipo.deleteUsuario(usuario);
+    }
 }
