@@ -2,12 +2,14 @@ package madstodolist.service;
 
 import madstodolist.model.Equipo;
 import madstodolist.model.EquipoRepository;
+import madstodolist.model.Usuario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class EquipoService {
 
     @Autowired
     EquipoRepository equipoRepository;
+    @Autowired
+    UsuarioService usuarioService;
 
     @Transactional
     public Equipo crearEquipo(String nombre) {
@@ -36,5 +40,17 @@ public class EquipoService {
                 (Equipo e1,Equipo e2)->e1.getNombre().compareTo(e2.getNombre())
         );
         return equipos;
+    }
+    @Transactional
+    public void addUsuarioEquipo(Long idU,Long idE){
+        Equipo equipo = this.recuperarEquipo(idE);
+        Usuario usuario = usuarioService.findById(idU);
+        equipo.addUsuario(usuario);
+    }
+    @Transactional(readOnly = true)
+    public List<Usuario>usuariosEquipo(Long idE){
+        Equipo eq = this.recuperarEquipo(idE);
+        List<Usuario> users = new ArrayList<>(eq.getUsuarios());
+        return users;
     }
 }
