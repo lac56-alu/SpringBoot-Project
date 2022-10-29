@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -53,13 +55,13 @@ public class EquiposController {
     }
     @PostMapping("/equipos/{id}")
     @ResponseBody
-    public String meterme(Model model){
-
+    public String meterme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
+        equipoService.addUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
         return "";
     }
     @DeleteMapping("/equipos/{id}")
-    public String eliminarme(Model model){
-        
+    public String eliminarme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
+        equipoService.deleteUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
         return "";
     }
 }
