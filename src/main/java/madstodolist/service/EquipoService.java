@@ -1,5 +1,6 @@
 package madstodolist.service;
 
+import madstodolist.controller.exception.EquipoNoNameException;
 import madstodolist.model.Equipo;
 import madstodolist.model.EquipoRepository;
 import madstodolist.model.Usuario;
@@ -24,6 +25,9 @@ public class EquipoService {
 
     @Transactional
     public Equipo crearEquipo(String nombre) {
+        if(nombre==""){
+            throw new EquipoNoNameException();
+        }
         Equipo equipo = new Equipo(nombre);
         equipoRepository.save(equipo);
         return equipo;
@@ -56,5 +60,11 @@ public class EquipoService {
         Equipo eq = this.recuperarEquipo(idE);
         List<Usuario> users = new ArrayList<>(eq.getUsuarios());
         return users;
+    }
+    @Transactional
+    public void deleteUsuarioEquipo(Long idU,Long idE){
+        Equipo equipo = this.recuperarEquipo(idE);
+        Usuario usuario = usuarioService.findById(idU);
+        equipo.deleteUsuario(usuario);
     }
 }
