@@ -1,5 +1,6 @@
 package madstodolist;
 
+import madstodolist.controller.exception.EquipoNoNameException;
 import madstodolist.model.Equipo;
 import madstodolist.model.Usuario;
 import madstodolist.service.EquipoService;
@@ -128,5 +129,11 @@ public class EquipoServiceTest {
         // THEN
         // El usuario se ha eliminado correctamente
         assertThat(usuarios).hasSize(0);
+    }
+    @Test
+    public void noNombreEquipoException(){
+        assertThatThrownBy(() -> {
+            equipoService.crearEquipo("");
+        }).isInstanceOf(EquipoNoNameException.class);
     }
 }
