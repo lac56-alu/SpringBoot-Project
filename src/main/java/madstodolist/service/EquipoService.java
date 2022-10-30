@@ -86,4 +86,12 @@ public class EquipoService {
         }
         equipoRepository.delete(equipo);
     }
+    @Transactional
+    public void modificarEquipo(Equipo equipo,String newNombre){
+        if(equipo == null){
+            throw new EquipoServiceException("No existe equipo con id "+ equipo.getId());
+        }
+        equipo.setNombre(newNombre);
+        equipoRepository.save(equipo);
+    }
 }
