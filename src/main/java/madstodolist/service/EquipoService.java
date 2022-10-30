@@ -3,6 +3,7 @@ package madstodolist.service;
 import madstodolist.controller.exception.EquipoNoNameException;
 import madstodolist.model.Equipo;
 import madstodolist.model.EquipoRepository;
+import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,5 +78,20 @@ public class EquipoService {
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
         equipo.deleteUsuario(usuario);
+    }
+    @Transactional
+    public void eliminarEquipo(Equipo equipo) {
+        if(equipo == null) {
+            throw new EquipoServiceException("No existe equipo con id " + equipo.getId());
+        }
+        equipoRepository.delete(equipo);
+    }
+    @Transactional
+    public void modificarEquipo(Equipo equipo,String newNombre){
+        if(equipo == null){
+            throw new EquipoServiceException("No existe equipo con id "+ equipo.getId());
+        }
+        equipo.setNombre(newNombre);
+        equipoRepository.save(equipo);
     }
 }

@@ -15,6 +15,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @SpringBootTest
@@ -136,4 +138,21 @@ public class EquipoServiceTest {
             equipoService.crearEquipo("");
         }).isInstanceOf(EquipoNoNameException.class);
     }
+    @Test
+    public void eliminarEquipo(){
+        Equipo eq = equipoService.crearEquipo("Equipo");
+        Equipo EB= equipoService.recuperarEquipo(eq.getId());
+        assertThat(EB).isNotNull();
+        equipoService.eliminarEquipo(eq);
+        assertNull(equipoService.recuperarEquipo(eq.getId()));
+    }
+    @Test
+    public void modificarEquipo(){
+        Equipo eq = equipoService.crearEquipo("Equipo");
+        Equipo EB= equipoService.recuperarEquipo(eq.getId());
+        assertThat(EB).isNotNull();
+        equipoService.modificarEquipo(eq,"NuevoEquipo");
+        assertEquals("NuevoEquipo",eq.getNombre());
+    }
+
 }
