@@ -37,7 +37,7 @@ public class EquipoService {
         Equipo equipo = equipoRepository.findById(id).orElse(null);
         return equipo;
     }
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public List<Equipo> findAllOrderedByName(){
         List<Equipo>equipos = equipoRepository.findAll();
         Collections.sort(equipos,

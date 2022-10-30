@@ -68,4 +68,19 @@ public class EquiposController {
         equipoService.deleteUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
         return "";
     }
+    @GetMapping("/equipos/nuevo")
+    public String formNuevoEquipo(@ModelAttribute EquipoData equipoData, Model model,
+                                 HttpSession session) {
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        return "formNuevoEquipo";
+    }
+    @PostMapping("/equipos/nuevo")
+    public String nuevoEquipo(@ModelAttribute EquipoData equipoData,
+                             Model model, RedirectAttributes flash,
+                             HttpSession session) {
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        equipoService.crearEquipo(equipoData.getNombre());
+        flash.addFlashAttribute("mensaje", "Equipo creado correctamente");
+        return "redirect:/equipos";
+    }
 }
