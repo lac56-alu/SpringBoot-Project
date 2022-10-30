@@ -13,12 +13,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -73,5 +73,66 @@ public class GestionEquipoWebTest {
                         containsString("EquipoNew"),
                         containsString("Añadirme")
                 ))));
+    }
+    @Test
+    public void editarEquipo()throws Exception{
+        Usuario us = new Usuario("user@ua");
+        us.setPassword("123");
+        us.setAdministrador(true);
+        us = usuarioService.registrar(us);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
+        String url = "/equipos/nuevo";
+        this.mockMvc.perform(post(url)
+                        .param("nombre", "EquipoNew"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/equipos"));
+
+        this.mockMvc.perform(get("/equipos"))
+                .andExpect((content().string(allOf(
+                        containsString("EquipoNew"),
+                        containsString("Añadirme"),
+                        containsString("editar"),
+                        containsString("borrar")
+                ))));
+        List<Equipo>equipos = equipoService.findAllOrderedByName();
+        this.mockMvc.perform(post("/equipos/"+equipos.get(0).getId()+"/editar")
+                        .param("nombre", "EquipoEditado"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/equipos"));
+        this.mockMvc.perform(get("/equipos"))
+                .andExpect((content().string(allOf(
+                        containsString("EquipoEditado"),
+                        containsString("Añadirme"),
+                        containsString("editar"),
+                        containsString("borrar")
+                ))));
+    }
+    @Test
+    public void borrarEquipo()throws Exception{
+        Usuario us = new Usuario("user@ua");
+        us.setPassword("123");
+        us.setAdministrador(true);
+        us = usuarioService.registrar(us);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
+        String url = "/equipos/nuevo";
+        this.mockMvc.perform(post(url)
+                        .param("nombre", "EquipoNew"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/equipos"));
+
+        this.mockMvc.perform(get("/equipos"))
+                .andExpect((content().string(allOf(
+                        containsString("EquipoNew"),
+                        containsString("Añadirme"),
+                        containsString("editar"),
+                        containsString("borrar")
+                ))));
+        List<Equipo>equipos = equipoService.findAllOrderedByName();
+        this.mockMvc.perform(delete("/equipos/"+equipos.get(0).getId()+"/eliminar"))
+                .andExpect(status().isOk());
+        this.mockMvc.perform(get("/equipos"))
+                .andExpect((content().string(
+                        (not(containsString("EquipoNew")
+                        )))));
     }
 }
