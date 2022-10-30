@@ -37,7 +37,7 @@ public class EquipoService {
         Equipo equipo = equipoRepository.findById(id).orElse(null);
         return equipo;
     }
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public List<Equipo> findAllOrderedByName(){
         List<Equipo>equipos = equipoRepository.findAll();
         Collections.sort(equipos,
@@ -54,6 +54,17 @@ public class EquipoService {
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
         equipo.addUsuario(usuario);
+    }
+    @Transactional(readOnly = true)
+    public boolean searchUsuarioEquipo(Long idU,Long idE){
+        boolean encontrado=false;
+        List<Usuario>users = usuariosEquipo(idE);
+        for(int i=0;i<users.size()&&encontrado==false;i++){
+            if(users.get(i).getId()==idU){
+                encontrado = true;
+            }
+        }
+        return encontrado;
     }
     @Transactional(readOnly = true)
     public List<Usuario>usuariosEquipo(Long idE){
