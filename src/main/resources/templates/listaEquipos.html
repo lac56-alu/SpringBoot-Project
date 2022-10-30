@@ -57,6 +57,7 @@
                     <th>Nombre</th>
                     <th>Enlace Miembros</th>
                     <th>Acceso</th>
+                    <th th:if="${soyadmin}">Accion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,6 +69,10 @@
                                                                th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')'">Eliminarme</button>
                         <button th:if="${!pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'meterme(\'/equipos/' + ${equipo.id} + '\')'">Añadirme</button>
+                    </td>
+                    <td th:if="${soyadmin}"><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
+                        <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                th:onclick="'del(\'/equipos/' + ${equipo.id} + '/eliminar\')'">borrar</button>
                     </td>
                 </tr>
                 </tbody>
@@ -103,6 +108,13 @@
         if (confirm('¿Estás seguro/a de que quieres entrar en el equipo?')) {
             fetch(urlHabilitar, {
                 method: 'POST'
+            }).then((res) => location.reload());
+        }
+    }
+    function del(urlBorrar) {
+        if (confirm('¿Estás seguro/a de que quieres eliminar el equipo?')) {
+            fetch(urlBorrar, {
+                method: 'DELETE'
             }).then((res) => location.reload());
         }
     }
