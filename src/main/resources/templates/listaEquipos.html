@@ -57,7 +57,7 @@
                     <th>Nombre</th>
                     <th>Enlace Miembros</th>
                     <th>Acceso</th>
-                    <th>Accion</th>
+                    <th th:if="${soyadmin}">Accion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -70,7 +70,7 @@
                         <button th:if="${!pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'meterme(\'/equipos/' + ${equipo.id} + '\')'">Añadirme</button>
                     </td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
+                    <td th:if="${soyadmin}"><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
                         <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'del(\'/equipos/' + ${equipo.id} + '/eliminar\')'">borrar</button>
                     </td>
