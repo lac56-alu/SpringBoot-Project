@@ -57,6 +57,7 @@
                     <th>Nombre</th>
                     <th>Enlace Miembros</th>
                     <th>Acceso</th>
+                    <th>Accion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,6 +69,8 @@
                                                                th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')'">Eliminarme</button>
                         <button th:if="${!pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'meterme(\'/equipos/' + ${equipo.id} + '\')'">Añadirme</button>
+                    </td>
+                    <td><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
                     </td>
                 </tr>
                 </tbody>
