@@ -93,7 +93,7 @@ public class EquiposController {
         return "redirect:/equipos";
     }
     @GetMapping("/equipos/{id}/editar")
-    public String formEditaTarea(@PathVariable(value="id") Long idEquipo, @ModelAttribute EquipoData equipoData,
+    public String formEditaEquipo(@PathVariable(value="id") Long idEquipo, @ModelAttribute EquipoData equipoData,
                                  Model model, HttpSession session) {
 
         Equipo equipo = equipoService.findById(idEquipo);
@@ -118,5 +118,17 @@ public class EquiposController {
         equipoService.modificarEquipo(equipo, equipoData.getNombre());
         flash.addFlashAttribute("mensaje", "Equipo modificado correctamente");
         return "redirect:/equipos";
+    }
+    @DeleteMapping("/equipos/{id}/eliminar")
+    @ResponseBody
+    public String eliminarEquipo(@PathVariable(value="id") Long idEquipo, RedirectAttributes flash, HttpSession session) {
+        Equipo equipo = equipoService.findById(idEquipo);
+        if (equipo == null) {
+            throw new EquipoNotFoundException();
+        }
+        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
+
+        equipoService.eliminarEquipo(equipo);
+        return "";
     }
 }
