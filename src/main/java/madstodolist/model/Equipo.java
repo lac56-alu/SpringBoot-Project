@@ -17,6 +17,8 @@ public class Equipo implements Serializable {
     private String nombre;
     private String descripcion;
 
+    private Usuario lider;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "equipo_usuario",
             joinColumns = { @JoinColumn(name = "fk_equipo") },
@@ -51,6 +53,13 @@ public class Equipo implements Serializable {
     }
     public void setDescripcion(String descripcion){
         this.descripcion = descripcion;
+    }
+
+    public Usuario getLider() {
+        return this.lider;
+    }
+    public void setLider(Usuario lider) {
+        this.lider = lider;
     }
     public void addUsuario(Usuario usuario) {
         this.getUsuarios().add(usuario);
