@@ -15,6 +15,8 @@ public class Equipo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    private String descripcion;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "equipo_usuario",
             joinColumns = { @JoinColumn(name = "fk_equipo") },
@@ -23,6 +25,11 @@ public class Equipo implements Serializable {
     public Equipo() {}
     public Equipo(String nombre){
         this.nombre = nombre;
+        this.descripcion = "";
+    }
+    public Equipo(String nombre, String descripcion){
+        this.nombre = nombre;
+        this.descripcion = descripcion;
     }
     public Long getId() {
         return id;
@@ -38,6 +45,12 @@ public class Equipo implements Serializable {
     }
     public Set<Usuario> getUsuarios() {
         return usuarios;
+    }
+    public String getDescripcion(){
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion){
+        this.descripcion = descripcion;
     }
     public void addUsuario(Usuario usuario) {
         this.getUsuarios().add(usuario);
