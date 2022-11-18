@@ -52,7 +52,7 @@ public class EquipoServiceTest {
         assertThat(equipos.get(0).getNombre()).isEqualTo("Proyecto AAA");
         assertThat(equipos.get(0).getDescripcion()).isEqualTo("Descripcion Proyecto AAA");
         assertThat(equipos.get(1).getNombre()).isEqualTo("Proyecto BBB");
-        assertThat(equipos.get(1).getNombre()).isEqualTo("Descripcion Proyecto BBB");
+        assertThat(equipos.get(1).getDescripcion()).isEqualTo("Descripcion Proyecto BBB");
     }
     @Test
     public void accesoUsuariosGeneraExcepcion() {

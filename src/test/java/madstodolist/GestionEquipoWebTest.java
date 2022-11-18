@@ -42,8 +42,8 @@ public class GestionEquipoWebTest {
         us.setAdministrador(true);
         us = usuarioService.registrar(us);
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1");
-        Equipo equipo2= equipoService.crearEquipo("Equipo2");
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1");
+        Equipo equipo2= equipoService.crearEquipo("Equipo2", "Descripcion Equipo 2");
         equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
         String url = "/equipos";
 
