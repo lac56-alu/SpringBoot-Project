@@ -42,15 +42,17 @@ public class ListadoEquiposWebTest {
         us.setAdministrador(true);
         us = usuarioService.registrar(us);
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1");
-        Equipo equipo2= equipoService.crearEquipo("Equipo2");
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1");
+        Equipo equipo2= equipoService.crearEquipo("Equipo2", "Descripcion Equipo 2");
         equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
         String url = "/equipos";
 
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
                         containsString("Equipo1"),
-                        containsString("Equipo2")
+                        containsString("Descripcion Equipo 1"),
+                        containsString("Equipo2"),
+                        containsString("Descripcion Equipo 2")
                 ))));
     }
     @Test
@@ -63,7 +65,7 @@ public class ListadoEquiposWebTest {
         us2.setPassword("123");
         us2 = usuarioService.registrar(us2);
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1");
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1");
         equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
         equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
         String url = "/equipos/"+equipo.getId();

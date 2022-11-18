@@ -88,7 +88,7 @@ public class EquiposController {
                              Model model, RedirectAttributes flash,
                              HttpSession session) {
         comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
-        equipoService.crearEquipo(equipoData.getNombre());
+        equipoService.crearEquipo(equipoData.getNombre(), equipoData.getDescripcion());
         flash.addFlashAttribute("mensaje", "Equipo creado correctamente");
         return "redirect:/equipos";
     }
@@ -103,6 +103,7 @@ public class EquiposController {
         comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
         model.addAttribute("equipo", equipo);
         equipoData.setNombre(equipo.getNombre());
+        equipoData.setDescripcion(equipo.getDescripcion());
         return "formEditarEquipo";
     }
 
@@ -115,7 +116,7 @@ public class EquiposController {
         }
         comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
 
-        equipoService.modificarEquipo(equipo, equipoData.getNombre());
+        equipoService.modificarEquipo(equipo, equipoData.getNombre(), equipoData.getDescripcion());
         flash.addFlashAttribute("mensaje", "Equipo modificado correctamente");
         return "redirect:/equipos";
     }
