@@ -50,7 +50,9 @@ public class ListadoEquiposWebTest {
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
                         containsString("Equipo1"),
-                        containsString("Equipo2")
+                        containsString("Descripcion Equipo 1"),
+                        containsString("Equipo2"),
+                        containsString("Descripcion Equipo 2")
                 ))));
     }
     @Test

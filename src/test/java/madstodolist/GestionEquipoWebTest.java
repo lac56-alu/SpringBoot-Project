@@ -50,7 +50,9 @@ public class GestionEquipoWebTest {
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
                         containsString("Equipo1"),
+                        containsString("Descripcion Equipo 1"),
                         containsString("Equipo2"),
+                        containsString("Descripcion Equipo 2"),
                         containsString("Añadirme"),
                         containsString("Eliminarme")
                 ))));
@@ -63,14 +65,17 @@ public class GestionEquipoWebTest {
         us = usuarioService.registrar(us);
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
         String url = "/equipos/nuevo";
+
         this.mockMvc.perform(post(url)
-                        .param("nombre", "EquipoNew"))
+                        .param("nombre", "EquipoNew")
+                        .param("descripcion", "DescripcionNew"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/equipos"));
 
         this.mockMvc.perform(get("/equipos"))
                 .andExpect((content().string(allOf(
                         containsString("EquipoNew"),
+                        containsString("DescripcionNew"),
                         containsString("Añadirme")
                 ))));
     }
@@ -83,25 +88,29 @@ public class GestionEquipoWebTest {
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
         String url = "/equipos/nuevo";
         this.mockMvc.perform(post(url)
-                        .param("nombre", "EquipoNew"))
+                        .param("nombre", "EquipoNew")
+                        .param("descripcion", "DescripcionNew"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/equipos"));
 
         this.mockMvc.perform(get("/equipos"))
                 .andExpect((content().string(allOf(
                         containsString("EquipoNew"),
+                        containsString("DescripcionNew"),
                         containsString("Añadirme"),
                         containsString("editar"),
                         containsString("borrar")
                 ))));
         List<Equipo>equipos = equipoService.findAllOrderedByName();
         this.mockMvc.perform(post("/equipos/"+equipos.get(0).getId()+"/editar")
-                        .param("nombre", "EquipoEditado"))
+                        .param("nombre", "EquipoEditado")
+                        .param("descripcion", "DescripcionEditado"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/equipos"));
         this.mockMvc.perform(get("/equipos"))
                 .andExpect((content().string(allOf(
                         containsString("EquipoEditado"),
+                        containsString("DescripcionEditado"),
                         containsString("Añadirme"),
                         containsString("editar"),
                         containsString("borrar")
@@ -116,13 +125,15 @@ public class GestionEquipoWebTest {
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
         String url = "/equipos/nuevo";
         this.mockMvc.perform(post(url)
-                        .param("nombre", "EquipoNew"))
+                        .param("nombre", "EquipoNew")
+                        .param("descripcion", "DescripcionNew"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/equipos"));
 
         this.mockMvc.perform(get("/equipos"))
                 .andExpect((content().string(allOf(
                         containsString("EquipoNew"),
+                        containsString("DescripcionNew"),
                         containsString("Añadirme"),
                         containsString("editar"),
                         containsString("borrar")
