@@ -45,10 +45,9 @@ public class EquipoTest {
 
     @Test
     public void crearEquipoConLider() {
-        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1");
         Usuario usuario = new Usuario("user@ua");
+        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1", usuario.getId());
 
-        equipo.setLider(usuario.getId());
         assertThat(equipo.getLider()).isEqualTo(usuario.getId());
     }
 

@@ -33,6 +33,11 @@ public class Equipo implements Serializable {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
+    public Equipo(String nombre, String descripcion, Long lider) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.lider = lider;
+    }
     public Long getId() {
         return id;
     }
