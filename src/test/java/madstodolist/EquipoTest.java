@@ -48,8 +48,8 @@ public class EquipoTest {
         Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1");
         Usuario usuario = new Usuario("user@ua");
 
-        equipo.setLider(usuario);
-        assertThat(equipo.getLider()).isEqualTo(usuario);
+        equipo.setLider(usuario.getId());
+        assertThat(equipo.getLider()).isEqualTo(usuario.getId());
     }
 
     @Test
