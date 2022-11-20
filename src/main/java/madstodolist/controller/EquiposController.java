@@ -65,6 +65,7 @@ public class EquiposController {
         model.addAttribute("users",users);
         model.addAttribute("Idequipo",equipo.getId());
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        model.addAttribute("lider", equipo.getLider());
         return "miembrosEquipo";
     }
     @PostMapping("/equipos/{id}")
@@ -93,8 +94,10 @@ public class EquiposController {
     public String nuevoEquipo(@ModelAttribute EquipoData equipoData,
                              Model model, RedirectAttributes flash,
                              HttpSession session) {
-        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
-        equipoService.crearEquipo(equipoData.getNombre(), equipoData.getDescripcion());
+        Long idUsuario = managerUserSession.usuarioLogeado();
+        comprobarUsuarioLogeado(idUsuario);
+        Usuario usuario = usuarioService.findById(idUsuario);
+        equipoService.crearEquipo(equipoData.getNombre(), equipoData.getDescripcion(), usuario.getId());
         flash.addFlashAttribute("mensaje", "Equipo creado correctamente");
         return "redirect:/equipos";
     }
