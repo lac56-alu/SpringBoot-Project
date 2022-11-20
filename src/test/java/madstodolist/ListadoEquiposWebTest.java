@@ -104,4 +104,27 @@ public class ListadoEquiposWebTest {
                         containsString("MIEMBRO")
                 ))));
     }
+
+    @Test
+    public void listaMiembrosExpulsar()throws Exception{
+        Usuario us = new Usuario("user@ua");
+        us.setPassword("123");
+        us.setAdministrador(true);
+        us = usuarioService.registrar(us);
+        Usuario us2 = new Usuario("user2@ua");
+        us2.setPassword("123");
+        us2 = usuarioService.registrar(us2);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
+        equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
+        equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
+        String url = "/equipos/"+equipo.getId();
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("user@ua"),
+                        containsString("user2@ua"),
+                        containsString("Expulsar")
+                ))));
+    }
 }

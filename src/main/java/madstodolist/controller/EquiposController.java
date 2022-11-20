@@ -63,6 +63,7 @@ public class EquiposController {
         Equipo equipo = equipoService.findById(idEquipo);
         List<Usuario> users = equipoService.usuariosEquipo(equipo.getId());
         model.addAttribute("users",users);
+        model.addAttribute("Idequipo",equipo.getId());
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         model.addAttribute("lider", equipo.getLider());
         return "miembrosEquipo";
@@ -76,6 +77,11 @@ public class EquiposController {
     @DeleteMapping("/equipos/{id}")
     public String eliminarme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
         equipoService.deleteUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
+        return "";
+    }
+    @DeleteMapping("/equipos/{id}/{idU}")
+    public String eliminar(@PathVariable(value="id") Long idE,@PathVariable(value="idU") Long idU, RedirectAttributes flash, HttpSession session){
+        equipoService.deleteUsuarioEquipo(idU,idE);
         return "";
     }
     @GetMapping("/equipos/nuevo")
