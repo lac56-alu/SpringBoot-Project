@@ -44,6 +44,14 @@ public class EquipoTest {
     }
 
     @Test
+    public void crearEquipoConLider() {
+        Usuario usuario = new Usuario("user@ua");
+        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1", usuario.getId());
+
+        assertThat(equipo.getLider()).isEqualTo(usuario.getId());
+    }
+
+    @Test
     @Transactional
     public void grabarYBuscarEquipo() {
         // GIVEN
