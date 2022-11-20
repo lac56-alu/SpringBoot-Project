@@ -52,9 +52,7 @@ public class GestionEquipoWebTest {
                         containsString("Equipo1"),
                         containsString("Descripcion Equipo 1"),
                         containsString("Equipo2"),
-                        containsString("Descripcion Equipo 2"),
-                        containsString("Añadirme"),
-                        containsString("Eliminarme")
+                        containsString("Descripcion Equipo 2")
                 ))));
     }
     @Test
@@ -75,8 +73,7 @@ public class GestionEquipoWebTest {
         this.mockMvc.perform(get("/equipos"))
                 .andExpect((content().string(allOf(
                         containsString("EquipoNew"),
-                        containsString("DescripcionNew"),
-                        containsString("Añadirme")
+                        containsString("DescripcionNew")
                 ))));
     }
     @Test
@@ -97,7 +94,6 @@ public class GestionEquipoWebTest {
                 .andExpect((content().string(allOf(
                         containsString("EquipoNew"),
                         containsString("DescripcionNew"),
-                        containsString("Añadirme"),
                         containsString("editar"),
                         containsString("borrar")
                 ))));
@@ -111,7 +107,6 @@ public class GestionEquipoWebTest {
                 .andExpect((content().string(allOf(
                         containsString("EquipoEditado"),
                         containsString("DescripcionEditado"),
-                        containsString("Añadirme"),
                         containsString("editar"),
                         containsString("borrar")
                 ))));
@@ -134,7 +129,6 @@ public class GestionEquipoWebTest {
                 .andExpect((content().string(allOf(
                         containsString("EquipoNew"),
                         containsString("DescripcionNew"),
-                        containsString("Añadirme"),
                         containsString("editar"),
                         containsString("borrar")
                 ))));

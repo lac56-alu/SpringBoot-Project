@@ -30,6 +30,8 @@ public class EquipoService {
             throw new EquipoNoNameException();
         }
         Equipo equipo = new Equipo(nombre,descripcion, lider);
+        Usuario usuario = usuarioService.findById(lider);
+        equipo.addUsuario(usuario);
         equipoRepository.save(equipo);
         return equipo;
     }
