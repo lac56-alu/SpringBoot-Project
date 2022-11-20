@@ -8,13 +8,14 @@ Para este apartado vamos a implementar la funcionalidad que nos va a permitir co
 
 Para la realización de este apartado hemos implementado los siguientes cambios:
  - Primero hemos añadido el atributo al modelo Equipo.java
-               
+        ```java     
         private String descripcion;
+        ```
 
  - Luego añadimos también tanto los getters/setters correspondientes.
  - También realizaremos el mismo cambio, en la clase EquipoData, que vamos a usar para recoger los campos de los formularios tanto de creación como de modificación.
  - Uno de los cambios más significativos será a la hora de introducir en el método contructor de equipos del controller, que habrá que añadir también el campo.
-
+        ```java
         @PostMapping("/equipos/nuevo")
         public String nuevoEquipo(@ModelAttribute EquipoData equipoData, Model model, RedirectAttributes flash, HttpSession session) {
                         comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
@@ -22,16 +23,19 @@ Para la realización de este apartado hemos implementado los siguientes cambios:
                         flash.addFlashAttribute("mensaje", "Equipo creado correctamente");
                         return "redirect:/equipos";
         }
+        ```
 
  - En los templates simplemente añadiremos, tanto en los formularios de añadir como de modificar el atributo de descripción, y en el listado de equipos también la visualización de ese campo:
-
+        ```java
         <div class="form-group">
                 <label for="descripcion">Descripcion del equipo:</label>
                 <input class="form-control" id="descripcion" name="descripcion" required th:field="*{descripcion}" type="text"/>
         </div>
+        ```
 
 Para completar esta funcionalidad obviamente añadiremos test. Para la realización de los test primeramente modificaremos los que ya tenemos para arreglar errores que venían derivados del cambio en el constructor del controller. Además añadiremos varios test y en test que ya tenemos probados, incluiremos llamadas de comprobación del campo descripción y su contenido.
 
+    ```java
     @Test
     @Transactional
     public void grabarYBuscarEquipo() {
@@ -44,6 +48,7 @@ Para completar esta funcionalidad obviamente añadiremos test. Para la realizaci
         assertThat(equipoDB).isNotNull();
         assertThat(equipoDB.getNombre()).isEqualTo("Proyecto P1");
     }
+    ```
 
  
 
