@@ -57,6 +57,7 @@
           <th>Email</th>
           <th>Nombre</th>
           <th>FechaNacimiento</th>
+          <th th:if="${soyadmin}">Accion</th>
         </tr>
         </thead>
         <tbody>
@@ -65,6 +66,8 @@
           <td th:text="${user.email}"></td>
           <td th:text="${user.nombre}"></td>
           <td th:text="${user.fechaNacimiento}"></td>
+          <td th:if="${soyadmin}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                          th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
         </tr>
         </tbody>
       </table>
@@ -86,5 +89,14 @@
 
 </div>
 <div th:replace="fragments::javascript"/>
+<script type="text/javascript">
+  function eliminar(urlBloquear) {
+    if (confirm('¿Estás seguro/a de que quieres expulsarlo del equipo?')) {
+      fetch(urlBloquear, {
+        method: 'DELETE'
+      }).then((res) => location.reload());
+    }
+  }
+</script>
 </body>
 </html>
