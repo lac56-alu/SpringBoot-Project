@@ -3,7 +3,51 @@
 ###### Curso: 2022-2023
 
 ## Funcionalidades Nuevas
-### 001 Rol de usuario en el equipo
+### 001 Descripción de los equipos
+Para este apartado vamos a implementar la funcionalidad que nos va a permitir consultar la descripción que va a tener cada uno de los equipos.
+
+Para la realización de este apartado hemos implementado los siguientes cambios:
+ - Primero hemos añadido el atributo al modelo Equipo.java
+               
+        private String descripcion;
+
+ - Luego añadimos también tanto los getters/setters correspondientes.
+ - También realizaremos el mismo cambio, en la clase EquipoData, que vamos a usar para recoger los campos de los formularios tanto de creación como de modificación.
+ - Uno de los cambios más significativos será a la hora de introducir en el método contructor de equipos del controller, que habrá que añadir también el campo.
+
+        @PostMapping("/equipos/nuevo")
+        public String nuevoEquipo(@ModelAttribute EquipoData equipoData, Model model, RedirectAttributes flash, HttpSession session) {
+                        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+                        equipoService.crearEquipo(equipoData.getNombre(), equipoData.getDescripcion());
+                        flash.addFlashAttribute("mensaje", "Equipo creado correctamente");
+                        return "redirect:/equipos";
+        }
+
+ - En los templates simplemente añadiremos, tanto en los formularios de añadir como de modificar el atributo de descripción, y en el listado de equipos también la visualización de ese campo:
+
+        <div class="form-group">
+                <label for="descripcion">Descripcion del equipo:</label>
+                <input class="form-control" id="descripcion" name="descripcion" required th:field="*{descripcion}" type="text"/>
+        </div>
+
+Para completar esta funcionalidad obviamente añadiremos test. Para la realización de los test primeramente modificaremos los que ya tenemos para arreglar errores que venían derivados del cambio en el constructor del controller. Además añadiremos varios test y en test que ya tenemos probados, incluiremos llamadas de comprobación del campo descripción y su contenido.
+
+    @Test
+    @Transactional
+    public void grabarYBuscarEquipo() {
+        Equipo equipo = new Equipo("Proyecto P1");
+        equipoRepository.save(equipo);
+
+        Long equipoId = equipo.getId();
+        assertThat(equipoId).isNotNull();
+        Equipo equipoDB = equipoRepository.findById(equipoId).orElse(null);
+        assertThat(equipoDB).isNotNull();
+        assertThat(equipoDB.getNombre()).isEqualTo("Proyecto P1");
+    }
+
+ 
+
+### 002 Rol de usuario en el equipo
 
 Ahora los usuarios que pertenezcan a un equipo pueden tener dos roles (Lider o miembro). De esta manera el 'lider' sería el encargado de dirigir el equipo
 en cuestión.
