@@ -42,8 +42,8 @@ public class ListadoEquiposWebTest {
         us.setAdministrador(true);
         us = usuarioService.registrar(us);
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1");
-        Equipo equipo2= equipoService.crearEquipo("Equipo2", "Descripcion Equipo 2");
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
+        Equipo equipo2= equipoService.crearEquipo("Equipo2", "Descripcion Equipo 2", us.getId());
         equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
         String url = "/equipos";
 
@@ -65,7 +65,7 @@ public class ListadoEquiposWebTest {
         us2.setPassword("123");
         us2 = usuarioService.registrar(us2);
         when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1");
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
         equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
         equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
         String url = "/equipos/"+equipo.getId();

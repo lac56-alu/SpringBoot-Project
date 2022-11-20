@@ -25,11 +25,11 @@ public class EquipoService {
     UsuarioService usuarioService;
 
     @Transactional
-    public Equipo crearEquipo(String nombre, String descripcion) {
+    public Equipo crearEquipo(String nombre, String descripcion, Long lider) {
         if(nombre==""){
             throw new EquipoNoNameException();
         }
-        Equipo equipo = new Equipo(nombre,descripcion);
+        Equipo equipo = new Equipo(nombre,descripcion, lider);
         equipoRepository.save(equipo);
         return equipo;
     }
