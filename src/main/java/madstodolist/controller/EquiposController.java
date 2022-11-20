@@ -64,6 +64,7 @@ public class EquiposController {
         List<Usuario> users = equipoService.usuariosEquipo(equipo.getId());
         model.addAttribute("users",users);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        model.addAttribute("lider", equipo.getLider());
         return "miembrosEquipo";
     }
     @PostMapping("/equipos/{id}")
