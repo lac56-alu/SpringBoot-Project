@@ -52,6 +52,20 @@ Como se puede observar en la imagen superior, en la tabla equipos hemos añadido
 
 #### Paso8.
 Para pasar de schema1.2.0 a schema1.3.0 sin tener que eliminar la BD necesitamos un script de migración.
+
+#### Paso9.
+Cuando trabajabamos con el esquema schema1.2.0 teniamos guardados unos datos en la BD y hicimos backup de eso datos como se puede ver en la carpeta sql
+![image](https://user-images.githubusercontent.com/73485527/203162840-458bfc84-6caa-442b-9deb-37fa441e9a65.png)
+Y al actualizar el esquema a schema1.3.0 añadimos nuevos datos a BD y de nuevo guardamos una copia de seguridad backup.
+![image](https://user-images.githubusercontent.com/73485527/203163081-0e332983-46fb-4e48-8407-8937ecdedfa4.png)
+
+#### Paso10.
+Una restaurado datos finales ejecutamos el comando desde local
+```
+./mvnw spring-boot:run -D profiles=postgres-prod
+```
+Y ya podemos acceder a la aplicacón con los datos restaurados.
+
 ## Funcionalidades Nuevas
 ### 001 Descripción de los equipos
 Para este apartado vamos a implementar la funcionalidad que nos va a permitir consultar la descripción que va a tener cada uno de los equipos.
