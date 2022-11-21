@@ -2,6 +2,56 @@
 ###### Grupo 5: Benziane Mohammed Adel, Alejandro Company Rincón, Luis Alfonso Culiañez
 ###### Curso: 2022-2023
 
+## Detalles tecnicos
+#### Paso1.
+Al principio de la practica hemos añadido una regla a la rama main para que haya como minimo un aprobado por los revisores. Asi en cuanto un compañero suba algo y hace pull request no se merzcle con la rama main sin estar revisado el codigo por minimo un compañero.
+#### Paso2.
+Hemos cambiado el fichero Dockefile para poder pasarle parametros como el perfil.
+```
+FROM openjdk:8-jdk-alpine
+COPY target/*.jar app.jar
+ENTRYPOINT ["sh","-c","java -Djava.security.egd=file:/dev/urandom -jar /app.jar ${0} ${@}"]
+```
+#### Paso3.
+Hemos subido la imagen a dockerhub, al principio hemos subido la version 1.3.0-SNAPSHOT 
+```
+https://hub.docker.com/repository/docker/adelbenziane/mads-todolist-equipo05
+```
+#### Paso4.
+Para el despliegue en produccion con BD, creamos una red gestionada por docker
+```
+$ docker network create network-equipo
+```
+Creamos la base de datos la que va estar en produccion.
+```
+$ docker run -d --network network-equipo --network-alias postgres -v ${PWD}:/mi-host --name db-equipo -e POSTGRES_USER=mads -e POSTGRES_PASSWORD=mads -e POSTGRES_DB=mads postgres:13
+```
+#### Paso5.
+Para el mantenimiento de la base de datos en prouduccion, hacemos un backup de los datos pero también es muy importante tener el esquema de la BD, que se obtienen con los siguientes comandos.
+```
+$ docker exec -it db-equipo bash
+# pg_dump -U mads --clean mads > /mi-host/backup03092021.sql
+$ docker exec -it db-equipo bash
+# pg_dump -U mads -s mads > /mi-host/schema.sql
+# exit
+```
+#### Paso6.
+Subimos la nueva version a dockerhub.
+```
+https://hub.docker.com/repository/docker/adelbenziane/mads-todolist-equipo05
+```
+#### Paso7.
+Despues de modificar tablas y añadir funcionalidades nuevas tenemos que generar un nuevo esquema schema1.3.0
+y lo comparamos con el de version antigua, de resultado nos da lo siguiente
+
+![image](https://user-images.githubusercontent.com/73485527/203150427-3f83048c-6053-4d71-ae5d-20865a430b5b.png)
+Como se puede observar en la imagen superior, en la tabla equipos hemos añadido dos atributos mas.
+![image](https://user-images.githubusercontent.com/73485527/203151662-a610c27f-dc10-4290-81d0-204577a489a4.png)
+![image](https://user-images.githubusercontent.com/73485527/203151708-80cfdb66-5958-41df-ba33-ed61b9b30f4d.png)
+
+
+#### Paso8.
+Para pasar de schema1.2.0 a schema1.3.0 sin tener que eliminar la BD necesitamos un script de migración.
 ## Funcionalidades Nuevas
 ### 001 Descripción de los equipos
 Para este apartado vamos a implementar la funcionalidad que nos va a permitir consultar la descripción que va a tener cada uno de los equipos.
@@ -168,3 +218,53 @@ public void listaMiembrosConRol()throws Exception{
             ))));
 }
 ````
+### 003 Gestion de miembros del equipo
+Para esta funcionalidad he modificado la plantilla miembrosEquipo.html para añadir un boton de expulsar los usuarios por el administrador de la pagina web.
+Como se puede ver el boton expulsar pasandole el id del usuario para expulsar. Los miembros del equipo solo los puede expulsar el administrador de la aplicación.
+```
+<tr th:each="user: ${users}">
+          <td th:text="${user.id}"></td>
+          <td th:text="${user.email}"></td>
+          <td th:text="${user.nombre}"></td>
+          <td th:text="${user.fechaNacimiento}"></td>
+          <td th:if="${soyadmin}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                          th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
+          <td>
+            <div th:if="${user.id == lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-primary">LIDER</span></div>
+            <div th:if="${user.id != lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-secondary">MIEMBRO</span></div>
+          </td>
+ </tr>
+```
+Y este codigo de abajo es un metodo en la clase EquipoController pasandole el id del equipo y tambien el id del usuario a expulsar.
+```
+@DeleteMapping("/equipos/{id}/{idU}")
+    public String eliminar(@PathVariable(value="id") Long idE,@PathVariable(value="idU") Long idU, RedirectAttributes flash, HttpSession session){
+        equipoService.deleteUsuarioEquipo(idU,idE);
+        return "";
+    }
+```
+Por ultimo el codigo inferior es el test añadido para comprobar que aparezca el boton expulsar.
+```
+@Test
+    public void listaMiembrosExpulsar()throws Exception{
+        Usuario us = new Usuario("user@ua");
+        us.setPassword("123");
+        us.setAdministrador(true);
+        us = usuarioService.registrar(us);
+        Usuario us2 = new Usuario("user2@ua");
+        us2.setPassword("123");
+        us2 = usuarioService.registrar(us2);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
+        equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
+        equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
+        String url = "/equipos/"+equipo.getId();
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("user@ua"),
+                        containsString("user2@ua"),
+                        containsString("Expulsar")
+                ))));
+    }
+```
