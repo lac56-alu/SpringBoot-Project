@@ -30,7 +30,10 @@ public class EquipoServiceTest {
 
     @Test
     public void crearRecuperarEquipo() {
-        Equipo equipo = equipoService.crearEquipo("Proyecto 1");
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        Equipo equipo = equipoService.crearEquipo("Proyecto 1", "Descripcion Proyecto 1", usuario.getId());
         Equipo equipoBd = equipoService.recuperarEquipo(equipo.getId());
         assertThat(equipoBd).isNotNull();
         assertThat(equipoBd.getNombre()).isEqualTo("Proyecto 1");
@@ -39,8 +42,11 @@ public class EquipoServiceTest {
     public void listadoEquiposOrdenAlfabetico() {
         // GIVEN
         // Dos equipos en la base de datos
-        equipoService.crearEquipo("Proyecto BBB");
-        equipoService.crearEquipo("Proyecto AAA");
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        equipoService.crearEquipo("Proyecto BBB", "Descripcion Proyecto BBB", usuario.getId());
+        equipoService.crearEquipo("Proyecto AAA", "Descripcion Proyecto AAA", usuario.getId());
 
         // WHEN
         // Recuperamos los equipos
@@ -50,13 +56,18 @@ public class EquipoServiceTest {
         // Los equipos están ordenados por nombre
         assertThat(equipos).hasSize(2);
         assertThat(equipos.get(0).getNombre()).isEqualTo("Proyecto AAA");
+        assertThat(equipos.get(0).getDescripcion()).isEqualTo("Descripcion Proyecto AAA");
         assertThat(equipos.get(1).getNombre()).isEqualTo("Proyecto BBB");
+        assertThat(equipos.get(1).getDescripcion()).isEqualTo("Descripcion Proyecto BBB");
     }
     @Test
     public void accesoUsuariosGeneraExcepcion() {
         // Given
         // Un equipo en la base de datos
-        Equipo equipo = equipoService.crearEquipo("Proyecto 1");
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        Equipo equipo = equipoService.crearEquipo("Proyecto 1", "Descripcion Proyecto 1", usuario.getId());
 
         // WHEN
         // Se recupera el equipo
@@ -72,10 +83,10 @@ public class EquipoServiceTest {
     public void actualizarRecuperarUsuarioEquipo() {
         // GIVEN
         // Un equipo creado en la base de datos y un usuario registrado
-        Equipo equipo = equipoService.crearEquipo("Proyecto 1");
         Usuario usuario = new Usuario("user@ua");
         usuario.setPassword("123");
         usuario = usuarioService.registrar(usuario);
+        Equipo equipo = equipoService.crearEquipo("Proyecto 1", "Descripcion Proyecto 1", usuario.getId());
 
         // WHEN
         // Añadimos el usuario al equipo y lo recuperamos
@@ -91,10 +102,10 @@ public class EquipoServiceTest {
     public void comprobarRelacionUsuarioEquipos() {
         // GIVEN
         // Un equipo creado en la base de datos y un usuario registrado
-        Equipo equipo = equipoService.crearEquipo("Proyecto 1");
         Usuario usuario = new Usuario("user@ua");
         usuario.setPassword("123");
         usuario = usuarioService.registrar(usuario);
+        Equipo equipo = equipoService.crearEquipo("Proyecto 1", "Descripcion Proyecto 1", usuario.getId());
 
         // WHEN
         // Añadimos el usuario al equipo y lo recuperamos
@@ -110,11 +121,10 @@ public class EquipoServiceTest {
     public void eliminarUsuarioEquipo() {
         // GIVEN
         // Un equipo creado en la base de datos y un usuario registrado
-        Equipo equipo = equipoService.crearEquipo("Proyecto 1");
         Usuario usuario = new Usuario("user@ua");
         usuario.setPassword("123");
         usuario = usuarioService.registrar(usuario);
-
+        Equipo equipo = equipoService.crearEquipo("Proyecto 1", "Descripcion Proyecto 1", usuario.getId());
         // WHEN
         // Añadimos el usuario al equipo y lo recuperamos
         equipoService.addUsuarioEquipo(usuario.getId(), equipo.getId());
@@ -134,13 +144,17 @@ public class EquipoServiceTest {
     }
     @Test
     public void noNombreEquipoException(){
+        Usuario usuario = new Usuario("user@ua");
         assertThatThrownBy(() -> {
-            equipoService.crearEquipo("");
+            equipoService.crearEquipo("", "", usuario.getId());
         }).isInstanceOf(EquipoNoNameException.class);
     }
     @Test
     public void eliminarEquipo(){
-        Equipo eq = equipoService.crearEquipo("Equipo");
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        Equipo eq = equipoService.crearEquipo("Equipo", "Descripcion Equipo", usuario.getId());
         Equipo EB= equipoService.recuperarEquipo(eq.getId());
         assertThat(EB).isNotNull();
         equipoService.eliminarEquipo(eq);
@@ -148,10 +162,13 @@ public class EquipoServiceTest {
     }
     @Test
     public void modificarEquipo(){
-        Equipo eq = equipoService.crearEquipo("Equipo");
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        Equipo eq = equipoService.crearEquipo("Equipo", "Descripcion Equipo", usuario.getId());
         Equipo EB= equipoService.recuperarEquipo(eq.getId());
         assertThat(EB).isNotNull();
-        equipoService.modificarEquipo(eq,"NuevoEquipo");
+        equipoService.modificarEquipo(eq,"NuevoEquipo", "NuevaDescripcion");
         assertEquals("NuevoEquipo",eq.getNombre());
     }
 

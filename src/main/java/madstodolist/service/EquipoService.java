@@ -25,11 +25,13 @@ public class EquipoService {
     UsuarioService usuarioService;
 
     @Transactional
-    public Equipo crearEquipo(String nombre) {
+    public Equipo crearEquipo(String nombre, String descripcion, Long lider) {
         if(nombre==""){
             throw new EquipoNoNameException();
         }
-        Equipo equipo = new Equipo(nombre);
+        Equipo equipo = new Equipo(nombre,descripcion, lider);
+        Usuario usuario = usuarioService.findById(lider);
+        equipo.addUsuario(usuario);
         equipoRepository.save(equipo);
         return equipo;
     }
@@ -87,11 +89,12 @@ public class EquipoService {
         equipoRepository.delete(equipo);
     }
     @Transactional
-    public void modificarEquipo(Equipo equipo,String newNombre){
+    public void modificarEquipo(Equipo equipo,String newNombre, String newDescripcion){
         if(equipo == null){
             throw new EquipoServiceException("No existe equipo con id "+ equipo.getId());
         }
         equipo.setNombre(newNombre);
+        equipo.setDescripcion(newDescripcion);
         equipoRepository.save(equipo);
     }
 }

@@ -27,6 +27,30 @@ public class EquipoTest {
         Equipo equipo = new Equipo("Proyecto P1");
         assertThat(equipo.getNombre()).isEqualTo("Proyecto P1");
     }
+
+    @Test
+    public void crearEquipoDescripcion() {
+        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1");
+        assertThat(equipo.getNombre()).isEqualTo("Proyecto P1");
+        assertThat(equipo.getDescripcion()).isEqualTo("Descripción Proyecto 1");
+    }
+
+    @Test
+    public void cambioEquipoDescripcion() {
+        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1");
+        assertThat(equipo.getDescripcion()).isEqualTo("Descripción Proyecto 1");
+        equipo.setDescripcion("Nueva descripcion");
+        assertThat(equipo.getDescripcion()).isEqualTo("Nueva descripcion");
+    }
+
+    @Test
+    public void crearEquipoConLider() {
+        Usuario usuario = new Usuario("user@ua");
+        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1", usuario.getId());
+
+        assertThat(equipo.getLider()).isEqualTo(usuario.getId());
+    }
+
     @Test
     @Transactional
     public void grabarYBuscarEquipo() {
@@ -47,6 +71,29 @@ public class EquipoTest {
         assertThat(equipoDB).isNotNull();
         assertThat(equipoDB.getNombre()).isEqualTo("Proyecto P1");
     }
+
+    @Test
+    @Transactional
+    public void grabarYBuscarEquipoDescripcion() {
+        // GIVEN
+        // Un equipo nuevo
+        Equipo equipo = new Equipo("Proyecto P1", "Descripción Proyecto 1");
+
+        // WHEN
+        // Salvamos el equipo en la base de datos
+        equipoRepository.save(equipo);
+
+        // THEN
+        // Su identificador se ha actualizado y lo podemos
+        // usar para recuperarlo de la base de datos
+        Long equipoId = equipo.getId();
+        assertThat(equipoId).isNotNull();
+        Equipo equipoDB = equipoRepository.findById(equipoId).orElse(null);
+        assertThat(equipoDB).isNotNull();
+        assertThat(equipoDB.getNombre()).isEqualTo("Proyecto P1");
+        assertThat(equipoDB.getDescripcion()).isEqualTo("Descripción Proyecto 1");
+    }
+
     @Test
     public void comprobarIgualdadEquipos() {
         // GIVEN

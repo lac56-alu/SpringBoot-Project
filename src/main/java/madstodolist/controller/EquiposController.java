@@ -63,7 +63,9 @@ public class EquiposController {
         Equipo equipo = equipoService.findById(idEquipo);
         List<Usuario> users = equipoService.usuariosEquipo(equipo.getId());
         model.addAttribute("users",users);
+        model.addAttribute("Idequipo",equipo.getId());
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        model.addAttribute("lider", equipo.getLider());
         return "miembrosEquipo";
     }
     @PostMapping("/equipos/{id}")
@@ -77,6 +79,11 @@ public class EquiposController {
         equipoService.deleteUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
         return "";
     }
+    @DeleteMapping("/equipos/{id}/{idU}")
+    public String eliminar(@PathVariable(value="id") Long idE,@PathVariable(value="idU") Long idU, RedirectAttributes flash, HttpSession session){
+        equipoService.deleteUsuarioEquipo(idU,idE);
+        return "";
+    }
     @GetMapping("/equipos/nuevo")
     public String formNuevoEquipo(@ModelAttribute EquipoData equipoData, Model model,
                                  HttpSession session) {
@@ -87,8 +94,10 @@ public class EquiposController {
     public String nuevoEquipo(@ModelAttribute EquipoData equipoData,
                              Model model, RedirectAttributes flash,
                              HttpSession session) {
-        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
-        equipoService.crearEquipo(equipoData.getNombre());
+        Long idUsuario = managerUserSession.usuarioLogeado();
+        comprobarUsuarioLogeado(idUsuario);
+        Usuario usuario = usuarioService.findById(idUsuario);
+        equipoService.crearEquipo(equipoData.getNombre(), equipoData.getDescripcion(), usuario.getId());
         flash.addFlashAttribute("mensaje", "Equipo creado correctamente");
         return "redirect:/equipos";
     }
@@ -103,6 +112,7 @@ public class EquiposController {
         comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
         model.addAttribute("equipo", equipo);
         equipoData.setNombre(equipo.getNombre());
+        equipoData.setDescripcion(equipo.getDescripcion());
         return "formEditarEquipo";
     }
 
@@ -115,7 +125,7 @@ public class EquiposController {
         }
         comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
 
-        equipoService.modificarEquipo(equipo, equipoData.getNombre());
+        equipoService.modificarEquipo(equipo, equipoData.getNombre(), equipoData.getDescripcion());
         flash.addFlashAttribute("mensaje", "Equipo modificado correctamente");
         return "redirect:/equipos";
     }
