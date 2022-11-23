@@ -29,4 +29,6 @@ Una vez lanzada la aplicación puedes abrir un navegador y probar la página de 
 - [http://localhost:8080/login](http://localhost:8080/login)
 
 Podremos acceder al tablero donde se especificarán las funcionalidades y también donde se mostrará la evolución temporal del proyecto:
+```
 https://trello.com/b/ttq9LH9s/pr%C3%A1ctica-5
+```
