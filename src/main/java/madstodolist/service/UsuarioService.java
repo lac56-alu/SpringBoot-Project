@@ -112,4 +112,20 @@ public class UsuarioService {
         Usuario us = findById(id);
         us.setAcceso(true);
     }
+
+    @Transactional(readOnly = false)
+    public void modificarUsuario(Long idUsuario, Usuario modificar){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+
+        if(usuario != null){
+            usuario.setEmail(modificar.getEmail());
+            usuario.setPassword(modificar.getPassword());
+            usuario.setNombre(modificar.getNombre());
+            usuarioRepository.save(usuario);
+        }
+        else{
+            throw new UsuarioServiceException("Usuario erroneo, no se puede modificar...");
+        }
+
+    }
 }

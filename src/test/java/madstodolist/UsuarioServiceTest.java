@@ -156,4 +156,22 @@ public class UsuarioServiceTest {
         assertThat(usuario.getEmail()).isEqualTo("user@ua");
         assertThat(usuario.getNombre()).isEqualTo("Usuario Ejemplo");
     }
+
+    @Test
+    public void modificarUsuarioTest(){
+        Long idUsuarioModificar = addUsuarioBD();
+
+        Usuario usuario = new Usuario("modificar@gmail.com");
+        usuario.setNombre("Modificar");
+        usuario.setPassword("1234");
+        usuario = usuarioService.registrar(usuario);
+
+        usuarioService.modificarUsuario(idUsuarioModificar, usuario);
+
+        Usuario usuarioModificado = usuarioService.findById(idUsuarioModificar);
+
+        assertThat(usuarioModificado.getEmail()).isEqualTo("modificar@gmail.com");
+        assertThat(usuarioModificado.getNombre()).isEqualTo("Modificar");
+        assertThat(usuarioModificado.getPassword()).isEqualTo("1234");
+    }
 }
