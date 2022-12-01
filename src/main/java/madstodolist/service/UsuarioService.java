@@ -128,4 +128,14 @@ public class UsuarioService {
         }
 
     }
+
+    @Transactional(readOnly = false)
+    public void borrarUsuario(Long idUsuarioRegistrado, Long idUsuarioBorrar){
+        if(idUsuarioBorrar != idUsuarioRegistrado){
+            throw new UsuarioServiceException("No se puede borrar un usuario que no sea propio...");
+        }
+
+        usuarioRepository.deleteById(idUsuarioRegistrado);
+
+    }
 }

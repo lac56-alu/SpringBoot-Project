@@ -174,4 +174,21 @@ public class UsuarioServiceTest {
         assertThat(usuarioModificado.getNombre()).isEqualTo("Modificar");
         assertThat(usuarioModificado.getPassword()).isEqualTo("1234");
     }
+
+    @Test
+    public void borrarUsuarioTest(){
+        Long idUsuarioBorrar = addUsuarioBD();
+
+        usuarioService.borrarUsuario(idUsuarioBorrar, idUsuarioBorrar);
+        try{
+            usuarioService.borrarUsuario(idUsuarioBorrar, idUsuarioBorrar+1);
+        }
+        catch(Exception exception){
+            assertThat(exception.getMessage()).isEqualTo("No se puede borrar un usuario que no sea propio...");
+        }
+
+        Usuario usuarioBorrado = usuarioService.findById(idUsuarioBorrar);
+
+        assertThat(usuarioBorrado).isNull();
+    }
 }
