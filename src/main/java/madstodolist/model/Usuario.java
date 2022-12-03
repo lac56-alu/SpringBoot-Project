@@ -96,8 +96,8 @@ public class Usuario implements Serializable {
 
     public boolean getEnabled(){return enabled;}
     public void setEnabled(boolean enabled){this.enabled = enabled;}
-    public String getVerificacionCode(){return verificationCode;}
-    public void setVerificacionCode(String verificacionCode){
+    public String getVerificationCode(){return verificationCode;}
+    public void setVerificationCode(String verificacionCode){
         this.verificationCode = verificacionCode;
     }
 

@@ -4,6 +4,7 @@ import madstodolist.authentication.ManagerUserSession;
 import madstodolist.model.Usuario;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,13 +85,15 @@ public class LoginController {
             model.addAttribute("error", "El usuario " + registroData.geteMail() + " ya existe");
             return "formRegistro";
         }
-
         Usuario usuario = new Usuario(registroData.geteMail());
         usuario.setPassword(registroData.getPassword());
         usuario.setFechaNacimiento(registroData.getFechaNacimiento());
         usuario.setNombre(registroData.getNombre());
         usuario.setAdministrador(registroData.getAdministrador());
         usuario.setAcceso(true);
+        String randomCode = RandomString.make(64);
+        usuario.setVerificationCode(randomCode);
+        usuario.setEnabled(false);
         usuarioService.registrar(usuario);
         return "redirect:/login";
    }
