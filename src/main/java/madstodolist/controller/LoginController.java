@@ -95,7 +95,7 @@ public class LoginController {
         usuario.setVerificationCode(randomCode);
         usuario.setEnabled(false);
         usuarioService.registrar(usuario);
-        return "redirect:/login";
+        return "registro_check";
    }
 
    @GetMapping("/logout")
