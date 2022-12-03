@@ -126,8 +126,8 @@ public class UsuarioService {
         String toAddress = user.getEmail();
         String fromAddress = "adelbenziane17@gmail.com";
         String senderName = "Equipo5 TODOLIST";
-        String subject = "Porfavor verifica su registro";
-        String content = "Dear [[name]],<br>"
+        String subject = "Verificacion de la cuenta";
+        String content = "Estimado [[name]],<br>"
                 + "Porfavor dale al enlace inferior para verificar su registro:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFICAR</a></h3>"
                 + "Muchas gracias,<br>"

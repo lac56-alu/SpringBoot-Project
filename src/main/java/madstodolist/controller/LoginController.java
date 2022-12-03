@@ -66,8 +66,8 @@ public class LoginController {
         } else if (loginStatus == UsuarioService.LoginStatus.ERROR_BLOQUEADO){
             model.addAttribute("error","El usuario esta bloqueado");
             return "formLogin";
-        } else if (loginStatus == UsuarioService.LoginStatus.ERROR_BLOQUEADO){
-            model.addAttribute("error","Activala verficando el email");
+        } else if (loginStatus == UsuarioService.LoginStatus.CUENTA_DESACTIVADA){
+            model.addAttribute("error","Activala verificando el email");
             return "formLogin";
         }
         return "formLogin";
