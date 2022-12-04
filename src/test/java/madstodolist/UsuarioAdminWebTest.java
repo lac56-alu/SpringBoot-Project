@@ -57,6 +57,7 @@ public class UsuarioAdminWebTest {
         Usuario admin = new Usuario("admin@ua");
         admin.setPassword("admin");
         admin.setAdministrador(true);
+        admin.setEnabled(true);
         usuarioService.registrar(admin);
         String url = "/registro";
         this.mockMvc.perform(post("/login")
