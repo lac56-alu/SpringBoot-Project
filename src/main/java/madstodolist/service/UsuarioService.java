@@ -134,8 +134,6 @@ public class UsuarioService {
         if(idUsuarioBorrar != idUsuarioRegistrado){
             throw new UsuarioServiceException("No se puede borrar un usuario que no sea propio...");
         }
-
         usuarioRepository.deleteById(idUsuarioRegistrado);
-
     }
 }
