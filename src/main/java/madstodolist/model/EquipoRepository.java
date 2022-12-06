@@ -9,6 +9,8 @@ public interface EquipoRepository extends CrudRepository<Equipo, Long> {
     Optional<Equipo> findById(Long id);
     public List<Equipo> findAll();
 
-    @Query("select e from Equipo e where e.nombre like %?1%")
+    @Query("select e from Equipo e where" +
+            " CONCAT(e.id,e.nombre,e.descripcion) "
+            + "like %?1%")
     public List<Equipo> busqueda(String busca);
 }

@@ -102,6 +102,6 @@ public class EquipoService {
         if(busca != null){
             return equipoRepository.busqueda(busca);
         }
-        return equipoRepository.findAll();
+        return findAllOrderedByName();
     }
 }

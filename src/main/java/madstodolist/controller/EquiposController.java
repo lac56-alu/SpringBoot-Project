@@ -11,6 +11,7 @@ import madstodolist.model.Usuario;
 import madstodolist.service.EquipoService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,13 +44,14 @@ public class EquiposController {
         return equipoService.searchUsuarioEquipo(idU,idE);
     }
     @GetMapping("/equipos")
-    public String listadoEquipos(Model model){
+    public String listadoEquipos(Model model, @Param("busca")String busca){
         //la primera linea para proteger el listado de equipos
         comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
-        List<Equipo> equipos = equipoService.findAllOrderedByName();
+        List<Equipo> equipos = equipoService.buscador(busca);
         model.addAttribute("equipos",equipos);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("busca", busca);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         model.addAttribute("pertenecer",this);
         return "listaEquipos";
