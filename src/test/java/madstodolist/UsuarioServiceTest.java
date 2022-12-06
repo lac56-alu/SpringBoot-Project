@@ -25,6 +25,7 @@ public class UsuarioServiceTest {
         Usuario usuario = new Usuario("user@ua");
         usuario.setNombre("Usuario Ejemplo");
         usuario.setPassword("123");
+        usuario.setEnabled(true);
         usuario = usuarioService.registrar(usuario);
         return usuario.getId();
     }
