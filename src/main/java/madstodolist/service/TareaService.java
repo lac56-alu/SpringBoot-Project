@@ -43,8 +43,14 @@ public class TareaService {
         if (usuario == null) {
             throw new TareaServiceException("Usuario " + idUsuario + " no existe al listar tareas ");
         }
+
+
         List<Tarea> tareas = new ArrayList(usuario.getTareas());
         Collections.sort(tareas, (a, b) -> a.getId() < b.getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
+
+        if(busca!=null){
+            return tareaRepository.busqueda(busca,idUsuario);
+        }
         return tareas;
     }
 
