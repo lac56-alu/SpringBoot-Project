@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 // Hemos eliminado todos los @Transactional de los tests
@@ -130,5 +133,16 @@ public class TareaServiceTest {
 
         assertThat(tareaService.findById(tareaId)).isNull();
         assertThat(usuarioService.findById(usuarioId).getTareas()).hasSize(1);
+    }
+    @Test
+    public void buscarTareas(){
+        DosIds dosIds = addUsuarioTareasBD();
+        Long usuarioId = dosIds.usuarioId;
+        Long tareaId = dosIds.tareaId;
+
+
+        List<Tarea> tareas = tareaService.allTareasUsuario(usuarioId,"Lavar");
+        assertEquals(1,tareas.size());
+        assertEquals("Lavar coche",tareas.get(0).getTitulo());
     }
 }
