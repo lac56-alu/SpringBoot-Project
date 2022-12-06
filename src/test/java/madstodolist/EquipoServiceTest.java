@@ -171,5 +171,17 @@ public class EquipoServiceTest {
         equipoService.modificarEquipo(eq,"NuevoEquipo", "NuevaDescripcion");
         assertEquals("NuevoEquipo",eq.getNombre());
     }
+    @Test
+    public void buscarEquipo(){
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        Equipo eq = equipoService.crearEquipo("Equipo01", "Descripcion Equipo", usuario.getId());
+        Equipo EB= equipoService.recuperarEquipo(eq.getId());
+        assertThat(EB).isNotNull();
+        List<Equipo>equipos = equipoService.buscador("Equipo");
+        assertEquals(1,equipos.size());
+        assertEquals("Equipo01",equipos.get(0).getNombre());
+    }
 
 }
