@@ -127,4 +127,31 @@ public class ListadoEquiposWebTest {
                         containsString("Expulsar")
                 ))));
     }
+    @Test
+    public void listaEquiposBuscados()throws Exception{
+        Usuario us = new Usuario("user@ua");
+        us.setPassword("123");
+        us.setAdministrador(true);
+        us = usuarioService.registrar(us);
+        Usuario us2 = new Usuario("user2@ua");
+        us2.setPassword("123");
+        us2 = usuarioService.registrar(us2);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
+        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
+        equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
+        equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
+        String url = "/equipos";
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("Buscar"),
+                        containsString("Limpiar")
+                ))));
+        this.mockMvc.perform(get(url+"?busca="+equipo.getNombre()))
+                .andExpect((content().string(allOf(
+                        containsString("Buscar"),
+                        containsString("Limpiar"),
+                        containsString("Equipo1")
+                ))));
+    }
 }

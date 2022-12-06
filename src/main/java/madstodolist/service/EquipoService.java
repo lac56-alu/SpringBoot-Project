@@ -97,4 +97,11 @@ public class EquipoService {
         equipo.setDescripcion(newDescripcion);
         equipoRepository.save(equipo);
     }
+    @Transactional(readOnly = true)
+    public List<Equipo> buscador(String busca){
+        if(busca != null){
+            return equipoRepository.busqueda(busca);
+        }
+        return findAllOrderedByName();
+    }
 }
