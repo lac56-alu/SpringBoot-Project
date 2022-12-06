@@ -84,10 +84,12 @@ public class LoginController {
    public String registroSubmit(@Valid RegistroData registroData, BindingResult result, Model model, HttpServletRequest req) throws MessagingException, UnsupportedEncodingException {
 
         if (result.hasErrors()) {
+            model.addAttribute("admin",usuarioService.hayAdministrador());
             return "formRegistro";
         }
 
         if (usuarioService.findByEmail(registroData.geteMail()) != null) {
+            model.addAttribute("admin",usuarioService.hayAdministrador());
             model.addAttribute("registroData", registroData);
             model.addAttribute("error", "El usuario " + registroData.geteMail() + " ya existe");
             return "formRegistro";
