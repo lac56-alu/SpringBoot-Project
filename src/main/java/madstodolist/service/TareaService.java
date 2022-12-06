@@ -37,7 +37,7 @@ public class TareaService {
     }
 
     @Transactional(readOnly = true)
-    public List<Tarea> allTareasUsuario(Long idUsuario) {
+    public List<Tarea> allTareasUsuario(Long idUsuario,String busca) {
         logger.debug("Devolviendo todas las tareas del usuario " + idUsuario);
         Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
         if (usuario == null) {
