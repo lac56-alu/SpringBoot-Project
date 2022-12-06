@@ -1,10 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">MENU</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/about">ToDoList<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/tareas">Tareas</a>
+      </li>
+      <li th:if="${soyadmin}" class="nav-item">
+        <a class="nav-link" href="/registrados">Usuarios</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Equipos</a>
+      </li>
+      <li class="nav-item dropleft">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          [[${usuario.nombre}]]
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Cuenta</a>
+          <a class="dropdown-item" href="/logout">
+            Cerrar sesión [[${usuario.nombre}]]
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+
+  <h2 th:text="'Modificar Usuario: ' + ${usuario.getNombre()}"></h2>
+
+  <form method="post" th:action="@{/cuenta/modificar/{id}(id=${usuario.id})}" th:object="${usuarioData}">
+    <div class="col-6">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input class="form-control" id="nombre" name="nombre" required th:field="*{nombre}" type="text"/>
+
+        <label for="email">Email:</label>
+        <input class="form-control" id="email" name="email" required th:field="*{email}" type="text"/>
+
+        <label for="password">Password:</label>
+        <input class="form-control" id="password" name="password" required th:field="*{password}" type="password"/>
+
+        <label for="fechaNacimiento">Fecha de nacimiento</label>
+        <input id="fechaNacimiento" class="form-control" name="fechaNacimiento" placeholder="01-12-2019" th:field="*{fechaNacimiento}"/>
+      </div>
+      <button class="btn btn-primary" type="submit">Modificar cuenta</button>
+      <a class="btn btn-danger" href="/cuenta">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
 </body>
 </html>

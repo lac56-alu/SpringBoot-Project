@@ -121,6 +121,7 @@ public class UsuarioService {
             usuario.setEmail(modificar.getEmail());
             usuario.setPassword(modificar.getPassword());
             usuario.setNombre(modificar.getNombre());
+            usuario.setFechaNacimiento(modificar.getFechaNacimiento());
             usuarioRepository.save(usuario);
         }
         else{
