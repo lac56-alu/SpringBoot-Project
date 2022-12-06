@@ -105,4 +105,38 @@ public class CuentaUsuarioTest {
                 ))));
 
     }
+
+    @Test
+    public void borrarCuenta() throws Exception {
+        Usuario usuario = new Usuario("test@ua");
+        usuario.setNombre("Usuario Test");
+        usuario.setPassword("1234");
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        usuario.setFechaNacimiento(formatoFecha.parse("1999-01-01"));
+        Usuario usuarioFinal = usuarioService.registrar(usuario);
+
+        when(managerUserSession.usuarioLogeado()).thenReturn(usuarioFinal.getId());
+
+        String urlPeticion = "/cuenta";
+
+        this.mockMvc.perform(get(urlPeticion))
+                .andExpect((content().string(allOf(
+                        containsString("test@ua"),
+                        containsString("Usuario Test"),
+                        containsString("Nombre"),
+                        containsString("Email"),
+                        containsString("Administrador"),
+                        containsString("false"),
+                        containsString("Fecha de nacimiento"),
+                        containsString("1999-01-01"),
+                        containsString("Modificar Usuario"),
+                        containsString("Eliminar Usuario")
+                ))));
+
+        String urlPeticionPost = "/cuenta/borrar/" + usuarioFinal.getId().toString();
+
+        this.mockMvc.perform(get(urlPeticionPost))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+    }
 }

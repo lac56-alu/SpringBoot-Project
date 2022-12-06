@@ -1,19 +1,13 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSession;
-import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNoLogeadoException;
-import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
-import madstodolist.service.UsuarioServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -74,5 +68,20 @@ public class CuentaController {
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
         flash.addFlashAttribute("mensaje", "Usuario modificado correctamente");
         return "cuenta";
+    }
+
+    @GetMapping("/cuenta/borrar/{id}")
+    public String borrarCuenta(@PathVariable(value="id") Long idUsuario, Model model, RedirectAttributes flash, HttpSession session) {
+        if(managerUserSession.usuarioLogeado()==null){
+            throw new UsuarioNoLogeadoException();
+        }
+
+        comprobarUsuarioLogeado(idUsuario);
+        usuarioService.borrarUsuario(idUsuario, managerUserSession.usuarioLogeado());
+
+        model.addAttribute("error","Usuario borrado correctamente");
+        model.addAttribute("loginData", new LoginData());
+        flash.addFlashAttribute("mensaje", "Usuario borrado correctamente");
+        return "redirect:/login";
     }
 }

@@ -57,7 +57,7 @@
 </div>
 <br>
 <a class="btn btn-primary btn-xs" role="button" aria-pressed="true" th:href="@{/cuenta/modificar/{id}(id=${usuario.id})}"> Modificar Usuario </a>
-<a class="btn btn-danger btn-xs" role="button" aria-pressed="true" > Eliminar Usuario </a>
+<a class="btn btn-danger btn-xs" role="button" aria-pressed="true" th:href="@{/cuenta/borrar/{id}(id=${usuario.id})}"> Eliminar Usuario </a>
 
 <div class="row mt-2">
   <div class="col">
