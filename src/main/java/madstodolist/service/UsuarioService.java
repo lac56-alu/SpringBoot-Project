@@ -188,4 +188,11 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(idUsuarioRegistrado);
     }
+    @Transactional(readOnly = true)
+    public List<Usuario>busquedaUser(String busca){
+        if(busca != null){
+            usuarioRepository.busqueda(busca);
+        }
+        return findAll();
+    }
 }
