@@ -82,6 +82,7 @@ public class CuentaController {
         model.addAttribute("error","Usuario borrado correctamente");
         model.addAttribute("loginData", new LoginData());
         flash.addFlashAttribute("mensaje", "Usuario borrado correctamente");
+        managerUserSession.logout();
         return "redirect:/login";
     }
 }
