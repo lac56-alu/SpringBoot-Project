@@ -191,7 +191,7 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public List<Usuario>busquedaUser(String busca){
         if(busca != null){
-            usuarioRepository.busqueda(busca);
+            return usuarioRepository.busqueda(busca);
         }
         return findAll();
     }
