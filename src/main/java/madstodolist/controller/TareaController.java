@@ -8,6 +8,7 @@ import madstodolist.model.Usuario;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,14 +61,15 @@ public class TareaController {
      }
 
     @GetMapping("/usuarios/{id}/tareas")
-    public String listadoTareas(@PathVariable(value="id") Long idUsuario, Model model, HttpSession session) {
+    public String listadoTareas(@PathVariable(value="id") Long idUsuario, Model model, HttpSession session,@Param("busca")String busca) {
 
         comprobarUsuarioLogeado(idUsuario);
 
         Usuario usuario = usuarioService.findById(idUsuario);
-        List<Tarea> tareas = tareaService.allTareasUsuario(idUsuario);
+        List<Tarea> tareas = tareaService.allTareasUsuario(idUsuario,busca);
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("busca", busca);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(idUsuario));
         return "listaTareas";
     }

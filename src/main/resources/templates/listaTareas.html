@@ -50,6 +50,20 @@
 
     <div class="row mt-3">
         <div class="col">
+            <form class="form-inline" th:action="@{/usuarios/{id}/tareas(id=${usuario.id})}">
+                <div class="form-group mb-2">
+                    <label>Filtros  </label>
+                </div>
+                &nbsp;&nbsp;
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" name="busca" class="form-control" id="busca" th:value="${busca}" placeholder="Introduce para buscar" required>
+                </div>
+                &nbsp;&nbsp;
+                <input type="submit" class="btn btn-info mb-2" value="Buscar">
+                &nbsp;&nbsp;
+                <input type="button" class="btn btn-secondary mb-2" value="Limpiar" th:onclick="'limpiarDatos(\'/usuarios/'+${usuario.id}+'/tareas'+'\')'">
+            </form>
+            <br>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -99,6 +113,9 @@
                 method: 'DELETE'
             }).then((res) => location.reload());
         }
+    }
+    function limpiarDatos(urlUser){
+        window.location=urlUser;
     }
 </script>
 
