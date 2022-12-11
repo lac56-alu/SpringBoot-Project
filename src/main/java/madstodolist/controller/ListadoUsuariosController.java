@@ -9,6 +9,7 @@ import madstodolist.model.Usuario;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,12 +37,13 @@ public class ListadoUsuariosController {
         return usuarioService.devolverIDAdministrador();
     }
     @GetMapping("/registrados")
-    public String listadoUsuarios(Model model){
+    public String listadoUsuarios(Model model,@Param("busca")String busca){
         Long idAdmin = getIdAdministrador();
         comprobarUsuarioAdmin(idAdmin);
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
-        List<Usuario> usuarios = usuarioService.findAll();
+        List<Usuario> usuarios = usuarioService.busquedaUser(busca);
         model.addAttribute("usuarios",usuarios);
+        model.addAttribute("busca", busca);
         model.addAttribute("usuario", usuario);
         return "listaUsuarios";
     }

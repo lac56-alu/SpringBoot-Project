@@ -227,4 +227,11 @@ public class UsuarioService {
             throw new UsuarioServiceException("Usuario erroneo, no se puede modificar...");
         }
     }
+    @Transactional(readOnly = true)
+    public List<Usuario>busquedaUser(String busca){
+        if(busca != null){
+            return usuarioRepository.busqueda(busca);
+        }
+        return findAll();
+    }
 }
