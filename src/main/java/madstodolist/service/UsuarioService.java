@@ -180,6 +180,33 @@ public class UsuarioService {
         }
 
     }
+    @Transactional(readOnly = true)
+    public void sendRessetEmail(Usuario user, String siteURL)throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "adelbenziane17@gmail.com";
+        String senderName = "Equipo5 TODOLIST";
+        String subject = "Restablecer la contraseña";
+        String content = "Estimado [[name]],<br>"
+                + "Porfavor dale al enlace inferior para cambiar la contraseña:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">RESTABLECER</a></h3>"
+                + "Muchas gracias,<br>"
+                + "TODOLIST Equipo5.";
+
+        MimeMessage message = correo.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getNombre());
+        String resetUrl = siteURL + "/ressetPassword/" + user.getId();
+
+        content = content.replace("[[URL]]", resetUrl);
+
+        helper.setText(content, true);
+        correo.send(message);
+    }
 
     @Transactional(readOnly = false)
     public void borrarUsuario(Long idUsuarioRegistrado, Long idUsuarioBorrar){
@@ -187,6 +214,18 @@ public class UsuarioService {
             throw new UsuarioServiceException("No se puede borrar un usuario que no sea propio...");
         }
         usuarioRepository.deleteById(idUsuarioRegistrado);
+    }
+    @Transactional(readOnly = false)
+    public void resetPassword(Long iduser,String pass){
+        Usuario usuario = usuarioRepository.findById(iduser).orElse(null);
+
+        if(usuario != null){
+            usuario.setPassword(pass);
+            usuarioRepository.save(usuario);
+        }
+        else{
+            throw new UsuarioServiceException("Usuario erroneo, no se puede modificar...");
+        }
     }
     @Transactional(readOnly = true)
     public List<Usuario>busquedaUser(String busca){
