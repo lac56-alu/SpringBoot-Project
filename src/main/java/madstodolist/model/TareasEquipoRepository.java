@@ -9,5 +9,5 @@ public interface TareasEquipoRepository extends CrudRepository<TareasEquipo, Lon
             " CONCAT(t.id,t.titulo) "
             + "like %?1%" +
             " and t.equipo.id" + "= ?2")
-    public List<Tarea> busqueda(String busca, Long id);
+    public List<TareasEquipo> busqueda(String busca, Long id);
 }
