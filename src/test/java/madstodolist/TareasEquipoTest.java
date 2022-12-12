@@ -127,5 +127,80 @@ public class TareasEquipoTest {
         assertThat(tareaEquipoBD.getEquipo()).isEqualTo(equipo);
     }
 
+    @Test
+    @Transactional
+    public void unEquipoTieneUnaListaDeTareas() {
+        Equipo equipo = new Equipo("Equipo 99");
+        equipoRepository.save(equipo);
+        Long equipoId = equipo.getId();
 
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+            fecha = formatoFecha.parse("2022-12-12");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        TareasEquipo tareaEquipo = new TareasEquipo(equipo, "Titulo 1", "Descripcion 1", fecha);
+        TareasEquipo tareaEquipo2 = new TareasEquipo(equipo, "Titulo 2", "Descripcion 2", fecha);
+        tareasEquipoRepositoryRepository.save(tareaEquipo);
+        tareasEquipoRepositoryRepository.save(tareaEquipo2);
+
+        Equipo equipoRecuperado = equipoRepository.findById(equipoId).orElse(null);
+
+        assertThat(equipoRecuperado.getTareas()).hasSize(2);
+    }
+
+    @Test
+    @Transactional
+    public void añadirUnaTareaAUnEquipoEnBD() {
+        Equipo equipo = new Equipo("Equipo 99");
+        equipoRepository.save(equipo);
+        Long equipoId = equipo.getId();
+
+        Equipo equipoBD = equipoRepository.findById(equipoId).orElse(null);
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+            fecha = formatoFecha.parse("2022-12-12");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        TareasEquipo tareaEquipo = new TareasEquipo(equipo, "Titulo 1", "Descripcion 1", fecha);
+        tareasEquipoRepositoryRepository.save(tareaEquipo);
+        Long tareaId = tareaEquipo.getId();
+
+        TareasEquipo tareaEquipoBD = tareasEquipoRepositoryRepository.findById(tareaId).orElse(null);
+        assertThat(tareaEquipoBD).isEqualTo(tareaEquipo);
+        assertThat(tareaEquipo.getEquipo().getId()).isEqualTo(equipoBD.getId());
+
+        // y si recuperamos el usuario se obtiene la nueva tarea
+        equipoBD = equipoRepository.findById(equipoId).orElse(null);
+        assertThat(equipoBD.getTareas()).contains(tareaEquipoBD);
+    }
+
+    @Test
+    @Transactional
+    public void cambioEnLaEntidadEnTransactionalModificaLaBD() {
+        Equipo equipo = new Equipo("Equipo 99");
+        equipoRepository.save(equipo);
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+            fecha = formatoFecha.parse("2022-12-12");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        TareasEquipo tareaEquipo = new TareasEquipo(equipo, "Titulo 1", "Descripcion 1", fecha);
+        tareasEquipoRepositoryRepository.save(tareaEquipo);
+
+        Long tareaId = tareaEquipo.getId();
+        tareaEquipo = tareasEquipoRepositoryRepository.findById(tareaId).orElse(null);
+
+        tareaEquipo.setTitulo("Prueba");
+
+        TareasEquipo tareaBD = tareasEquipoRepositoryRepository.findById(tareaId).orElse(null);
+        assertThat(tareaBD.getTitulo()).isEqualTo(tareaEquipo.getTitulo());
+    }
 }
