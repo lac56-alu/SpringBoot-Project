@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,5 +102,26 @@ public class TareasEquipoTest {
 
         assertThat(tareasEquipo).isEqualTo(tareasEquipo3);
         assertThat(tareasEquipo).isNotEqualTo(tareasEquipo2);
+    }
+
+    @Test
+    @Transactional
+    public void guardarTareaEnBaseDatos() {
+
+        Equipo equipo = new Equipo("Equipo 2");
+        equipo.setId(8L);
+        equipoRepository.save(equipo);
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+            fecha = formatoFecha.parse("2022-12-12");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        TareasEquipo tareaEquipo = new TareasEquipo(equipo, "Titulo 1", "Descripcion 1", fecha);
+        tareasEquipoRepositoryRepository.save(tareaEquipo);
+
+        assertThat(tareaEquipo.getId()).isNotNull();
     }
 }
