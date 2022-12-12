@@ -1,7 +1,8 @@
-DELETE FROM usuarios;
 DELETE FROM equipo_usuario;
+DELETE FROM tareasequipo;
 DELETE FROM tareas;
 DELETE FROM equipos;
+DELETE FROM usuarios;
 
 INSERT INTO usuarios (id, email, nombre, password, fecha_nacimiento,administrador,acceso, enabled) VALUES('1', 'user@ua', 'Usuario Ejemplo', '123', '2001-02-10', false, false, true);
 INSERT INTO usuarios (id, email, nombre, password, fecha_nacimiento,administrador,acceso, enabled) VALUES('2', 'luis@ua', 'Luis Alfonso Culiañez', 'hola', '1999-04-29', true, false, true);
