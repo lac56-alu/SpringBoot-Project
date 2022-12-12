@@ -27,7 +27,6 @@ public class Equipo implements Serializable {
 
     @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     Set<TareasEquipo> tareas = new HashSet<>();
-
     public Equipo() {}
     public Equipo(String nombre){
         this.nombre = nombre;
