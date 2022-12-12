@@ -107,9 +107,7 @@ public class TareasEquipoTest {
     @Test
     @Transactional
     public void guardarTareaEnBaseDatos() {
-
         Equipo equipo = new Equipo("Equipo 2");
-        equipo.setId(8L);
         equipoRepository.save(equipo);
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
@@ -123,5 +121,11 @@ public class TareasEquipoTest {
         tareasEquipoRepositoryRepository.save(tareaEquipo);
 
         assertThat(tareaEquipo.getId()).isNotNull();
+
+        TareasEquipo tareaEquipoBD = tareasEquipoRepositoryRepository.findById(tareaEquipo.getId()).orElse(null);
+        assertThat(tareaEquipoBD.getTitulo()).isEqualTo(tareaEquipo.getTitulo());
+        assertThat(tareaEquipoBD.getEquipo()).isEqualTo(equipo);
     }
+
+
 }
