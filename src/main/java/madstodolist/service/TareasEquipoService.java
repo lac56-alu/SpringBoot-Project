@@ -78,4 +78,9 @@ public class TareasEquipoService {
         }
         tareasEquipoRepository.delete(tarea);
     }
+
+    @Transactional
+    public void guardarTareaEquipo(TareasEquipo tareasEquipo) {
+        tareasEquipoRepository.save(tareasEquipo);
+    }
 }

@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
@@ -44,9 +45,11 @@ public class TareasEquipoWebTest {
     private ManagerUserSession managerUserSession;
 
     class DosIds {
+        Long usuarioId;
         Long equipoId;
         Long tareaEquipoId;
-        public DosIds(Long equipoId, Long tareaEquipoId) {
+        public DosIds(Long usuarioId, Long equipoId, Long tareaEquipoId) {
+            this.usuarioId = usuarioId;
             this.equipoId = equipoId;
             this.tareaEquipoId = tareaEquipoId;
         }
@@ -67,16 +70,16 @@ public class TareasEquipoWebTest {
         }
         TareasEquipo tareasEquipo = tareasEquipoService.nuevaTareaEquipo(equipo.getId(), "Titulo 1", "Descripcion 1", fecha);
         TareasEquipo tareasEquipo2 = tareasEquipoService.nuevaTareaEquipo(equipo.getId(), "Titulo 2", "Descripcion 2", fecha);
-        return new TareasEquipoWebTest.DosIds(equipo.getId(), tareasEquipo.getId());
+        return new TareasEquipoWebTest.DosIds(usuario.getId(),equipo.getId(), tareasEquipo.getId());
     }
 
     @Test
     public void listaTareas() throws Exception {
-        Long equipoId = addTareasEquipoBD().equipoId;
+        TareasEquipoWebTest.DosIds variables = addTareasEquipoBD();
 
-        when(managerUserSession.usuarioLogeado()).thenReturn(equipoId);
+        when(managerUserSession.usuarioLogeado()).thenReturn(variables.usuarioId);
 
-        String url = "/equipo/" + equipoId.toString() + "/listaTareas";
+        String url = "/equipo/" + variables.equipoId.toString() + "/listaTareas";
 
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
@@ -86,6 +89,36 @@ public class TareasEquipoWebTest {
                         containsString("Titulo 2"),
                         containsString("Descripcion 2"),
                         containsString("2022-12-12")
+                ))));
+    }
+
+    @Test
+    public void comprobarModificacionTareaEquipo() throws Exception {
+        TareasEquipoWebTest.DosIds variables = addTareasEquipoBD();
+
+        when(managerUserSession.usuarioLogeado()).thenReturn(variables.usuarioId);
+
+        String url = "/equipo/" + variables.equipoId.toString() + "/listaTareas";
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("Titulo 1"),
+                        containsString("Descripcion 1"),
+                        containsString("2022-12-12")
+                ))));
+
+        String urlPost = "/equipo/" + variables.equipoId.toString() + "/modificarTarea/" + variables.tareaEquipoId.toString();
+
+        this.mockMvc.perform(post(urlPost)
+                .param("titulo", "Modificacion Titulo")
+                .param("descripcion", "Modificacion Descripcion")
+                .param("fecha", "29-04-2023"));
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("Modificacion Titulo"),
+                        containsString("Modificacion Descripcion"),
+                        containsString("2023-04-29")
                 ))));
     }
 }

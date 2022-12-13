@@ -58,6 +58,7 @@
                     <th>Titulo</th>
                     <th>Descripcion</th>
                     <th>Fecha</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -66,9 +67,11 @@
                     <td th:text="${tarea.titulo}"></td>
                     <td th:text="${tarea.descripcion}"></td>
                     <td th:text="${tarea.fecha}"></td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
+                    <td>
                         <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">Borrar</button>
+                        <a class="btn btn-primary btn-xs"
+                           th:href="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Modificar</a>
                     </td>
                 </tr>
                 </tbody>

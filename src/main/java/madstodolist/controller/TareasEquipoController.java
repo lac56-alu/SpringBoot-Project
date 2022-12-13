@@ -3,18 +3,17 @@ package madstodolist.controller;
 import madstodolist.authentication.ManagerUserSession;
 import madstodolist.controller.exception.UsuarioNoAdminException;
 import madstodolist.controller.exception.UsuarioNoLogeadoException;
-import madstodolist.model.Equipo;
-import madstodolist.model.Tarea;
-import madstodolist.model.TareasEquipo;
-import madstodolist.model.Usuario;
-import madstodolist.service.EquipoService;
-import madstodolist.service.UsuarioService;
+import madstodolist.model.*;
+import madstodolist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -26,7 +25,10 @@ public class TareasEquipoController {
     @Autowired
     UsuarioService usuarioService;
     @Autowired
+    TareasEquipoService tareasEquipoService;
+    @Autowired
     ManagerUserSession managerUserSession;
+
     private void comprobarUsuarioLogeado(Long idUsuario) {
         Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
         if(idUsuarioLogeado == null)
@@ -54,6 +56,61 @@ public class TareasEquipoController {
         model.addAttribute("equipo", equipo);
         model.addAttribute("tareas", tareas);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        return "listaTareasEquipo";
+    }
+
+    @GetMapping("/equipo/{idEquipo}/modificarTarea/{idTarea}")
+    public String listaTareasEquipo(@PathVariable(value="idEquipo") Long idEquipo, @PathVariable(value="idTarea") Long idTarea,
+                                    Model model, HttpSession session, TareasEquipoData tareasEquipoData){
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+
+        TareasEquipo tarea = tareasEquipoService.findById(idTarea);
+        if(tarea == null){
+            throw new TareasEquipoServiceException("Tarea con ese id no encontrada");
+        }
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("tarea", tarea);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        return "formModificarTareaEquipo";
+    }
+
+    @PostMapping("/equipo/{idEquipo}/modificarTarea/{idTarea}")
+    public String modificarTareaEquipo(@PathVariable(value="idEquipo") Long idEquipo, @PathVariable(value="idTarea") Long idTarea,
+                                       @ModelAttribute TareasEquipoData tareasEquipoData,
+                                  Model model, RedirectAttributes flash, HttpSession session) {
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+        TareasEquipo tarea = tareasEquipoService.findById(idTarea);
+        if(tarea == null){
+            throw new TareasEquipoServiceException("Tarea con ese id no encontrada");
+        }
+
+        tarea.setTitulo(tareasEquipoData.getTitulo());
+        tarea.setDescripcion(tareasEquipoData.getDescripcion());
+        tarea.setFecha(tareasEquipoData.getFecha());
+        tareasEquipoService.guardarTareaEquipo(tarea);
+
+        Set<TareasEquipo> tareas =equipoService.findById(equipo.getId()).getTareas();
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("tareas", tareas);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
+        flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
         return "listaTareasEquipo";
     }
 }
