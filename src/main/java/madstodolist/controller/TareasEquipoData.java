@@ -7,7 +7,7 @@ public class TareasEquipoData {
     private String titulo;
     private String descripcion;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date fechaNacimiento;
+    private Date fecha;
 
     public String getTitulo() {
         return titulo;
@@ -25,11 +25,11 @@ public class TareasEquipoData {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    public Date getFecha() {
+        return fecha;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 }
