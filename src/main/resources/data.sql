@@ -23,10 +23,10 @@ INSERT INTO tareas (id, titulo, usuario_id) VALUES('7', 'Comprar zapatillas', '4
 INSERT INTO tareas (id, titulo, usuario_id) VALUES('8', 'Entrenar red', '4');
 
 /* EQUIPOS */
-INSERT INTO equipos (id, nombre) VALUES ('1', 'Ferrari');
-INSERT INTO equipos (id, nombre) VALUES ('2', 'RedBull Racing');
-INSERT INTO equipos (id, nombre) VALUES ('3', 'Alpine');
-INSERT INTO equipos (id, nombre) VALUES ('4', 'Aston Martin');
+INSERT INTO equipos (id, nombre, descripcion) VALUES ('1', 'Ferrari', 'Equipo 1');
+INSERT INTO equipos (id, nombre, descripcion) VALUES ('2', 'RedBull Racing', 'Equipo 2');
+INSERT INTO equipos (id, nombre, descripcion) VALUES ('3', 'Alpine', 'Equipo 3');
+INSERT INTO equipos (id, nombre, descripcion) VALUES ('4', 'Aston Martin', 'Equipo 4');
 
 /* RELACION EQUIPOS-USUARIOS */
 INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES ('1', '1');
