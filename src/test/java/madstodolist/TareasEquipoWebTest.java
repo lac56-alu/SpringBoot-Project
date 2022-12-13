@@ -21,13 +21,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -120,5 +119,23 @@ public class TareasEquipoWebTest {
                         containsString("Modificacion Descripcion"),
                         containsString("2023-04-29")
                 ))));
+    }
+
+    @Test
+    public void deleteTareaEquipo() throws Exception {
+        TareasEquipoWebTest.DosIds variables = addTareasEquipoBD();
+
+        when(managerUserSession.usuarioLogeado()).thenReturn(variables.usuarioId);
+
+        String urlDelete = "/equipo/" + variables.equipoId.toString() + "/borrarTarea/" + variables.tareaEquipoId.toString();
+
+        this.mockMvc.perform(delete(urlDelete));
+
+        String url = "/equipo/" + variables.equipoId.toString() + "/listaTareas";
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        not(containsString("Titulo 1")),
+                        not(containsString("Descripcion 1"))))));
     }
 }

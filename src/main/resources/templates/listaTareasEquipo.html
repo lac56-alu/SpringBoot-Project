@@ -69,7 +69,7 @@
                     <td th:text="${tarea.fecha}"></td>
                     <td>
                         <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">Borrar</button>
+                                th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                         <a class="btn btn-primary btn-xs"
                            th:href="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Modificar</a>
                     </td>

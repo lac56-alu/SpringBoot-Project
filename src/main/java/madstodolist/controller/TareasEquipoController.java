@@ -1,6 +1,7 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSession;
+import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNoAdminException;
 import madstodolist.controller.exception.UsuarioNoLogeadoException;
 import madstodolist.model.*;
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -111,6 +109,31 @@ public class TareasEquipoController {
         model.addAttribute("tareas", tareas);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
+        return "listaTareasEquipo";
+    }
+
+    @DeleteMapping("/equipo/{idEquipo}/borrarTarea/{idTarea}")
+    @ResponseBody
+    public String borrarTarea(@PathVariable(value="idEquipo") Long idEquipo, @PathVariable(value="idTarea") Long idTarea,
+                              Model model, RedirectAttributes flash, HttpSession session) {
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+        TareasEquipo tarea = tareasEquipoService.findById(idTarea);
+        if(tarea == null){
+            throw new TareasEquipoServiceException("Tarea con ese id no encontrada");
+        }
+        tareasEquipoService.borraTareaEquipo(idTarea);
+        Set<TareasEquipo> tareas =equipoService.findById(equipo.getId()).getTareas();
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("tareas", tareas);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "listaTareasEquipo";
     }
 }
