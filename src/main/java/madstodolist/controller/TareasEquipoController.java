@@ -136,4 +136,45 @@ public class TareasEquipoController {
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "listaTareasEquipo";
     }
+
+    @GetMapping("/equipo/{idEquipo}/crearTarea")
+    public String crearTareasEquipo(@PathVariable(value="idEquipo") Long idEquipo,
+                                    Model model, HttpSession session, TareasEquipoData tareasEquipoData){
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        return "formCrearTareaEquipo";
+    }
+
+    @PostMapping("/equipo/{idEquipo}/crearTarea")
+    public String crearPostTareaEquipo(@PathVariable(value="idEquipo") Long idEquipo,
+                                       @ModelAttribute TareasEquipoData tareasEquipoData,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+
+        tareasEquipoService.nuevaTareaEquipo(equipo.getId(),tareasEquipoData.getTitulo(),tareasEquipoData.getDescripcion(),tareasEquipoData.getFecha());
+        Set<TareasEquipo> tareas = equipoService.findById(equipo.getId()).getTareas();
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("tareas", tareas);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
+        flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
+        return "listaTareasEquipo";
+    }
 }

@@ -138,4 +138,26 @@ public class TareasEquipoWebTest {
                         not(containsString("Titulo 1")),
                         not(containsString("Descripcion 1"))))));
     }
+
+    @Test
+    public void crearTareaEquipo() throws Exception {
+        TareasEquipoWebTest.DosIds variables = addTareasEquipoBD();
+
+        when(managerUserSession.usuarioLogeado()).thenReturn(variables.usuarioId);
+
+        String urlPost = "/equipo/" + variables.equipoId.toString() + "/crearTarea";
+
+        this.mockMvc.perform(post(urlPost)
+                .param("titulo", "Crear Titulo")
+                .param("descripcion", "Crear Descripcion")
+                .param("fecha", "29-04-2023"));
+
+        String url = "/equipo/" + variables.equipoId.toString() + "/listaTareas";
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("Crear Titulo"),
+                        containsString("Crear Descripcion"),
+                        containsString("2023-04-29")
+                ))));
+    }
 }
