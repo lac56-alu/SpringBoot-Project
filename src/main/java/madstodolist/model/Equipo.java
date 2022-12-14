@@ -24,6 +24,10 @@ public class Equipo implements Serializable {
             joinColumns = { @JoinColumn(name = "fk_equipo") },
             inverseJoinColumns = {@JoinColumn(name = "fk_usuario")})
     Set<Usuario> usuarios = new HashSet<>();
+
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    Set<TareasEquipo> tareas = new HashSet<>();
+
     public Equipo() {}
     public Equipo(String nombre){
         this.nombre = nombre;
@@ -74,6 +78,15 @@ public class Equipo implements Serializable {
         this.getUsuarios().remove(usuario);
         usuario.getEquipos().remove(this);
     }
+
+    public Set<TareasEquipo> getTareas() {
+        return tareas;
+    }
+
+    public void setTareas(Set<TareasEquipo> tareas) {
+        this.tareas = tareas;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
