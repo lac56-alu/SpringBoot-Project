@@ -85,8 +85,7 @@ public class TareaServiceTest {
         // THEN
         // al recuperar el usuario usando el método findByEmail la tarea creada
         // está en la lista de tareas del usuario.
-        LocalDate fecha = tareaService.findById(3L).getFechaFinal();
-        assertThat(fecha).isEqualTo(LocalDate.parse("2022-12-20"));
+        assertThat(tarea.getFechaFinal()).isEqualTo(LocalDate.parse("2022-12-20"));
     }
 
     @Test
