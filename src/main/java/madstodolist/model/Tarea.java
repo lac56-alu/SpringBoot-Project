@@ -18,7 +18,6 @@ public class Tarea implements Serializable {
     @NotNull
     private String titulo;
 
-    @NotNull
     private LocalDate fechaFinal;
     @NotNull
     // Relación muchos-a-uno entre tareas y usuario
@@ -35,12 +34,8 @@ public class Tarea implements Serializable {
     // Al crear una tarea la asociamos automáticamente a un
     // usuario. Actualizamos por tanto la lista de tareas del
     // usuario.
-    public Tarea(Usuario usuario, String titulo) {
-        this.usuario = usuario;
-        this.titulo = titulo;
-        this.fechaFinal = LocalDate.now();
-        usuario.getTareas().add(this);
-    }
+    //Si una tarea se crea sin fecha, la fecha por defecto será de 1 semana
+
     public Tarea(Usuario usuario, String titulo, LocalDate fechaFinal) {
         this.usuario = usuario;
         this.titulo = titulo;

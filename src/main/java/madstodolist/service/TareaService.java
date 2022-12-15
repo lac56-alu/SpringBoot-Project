@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,13 +26,14 @@ public class TareaService {
     private TareaRepository tareaRepository;
 
     @Transactional
-    public Tarea nuevaTareaUsuario(Long idUsuario, String tituloTarea) {
+    public Tarea nuevaTareaUsuario(Long idUsuario, String tituloTarea, LocalDate fecha) {
         logger.debug("Añadiendo tarea " + tituloTarea + " al usuario " + idUsuario);
         Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
         if (usuario == null) {
             throw new TareaServiceException("Usuario " + idUsuario + " no existe al crear tarea " + tituloTarea);
         }
-        Tarea tarea = new Tarea(usuario, tituloTarea);
+
+        Tarea tarea = new Tarea(usuario, tituloTarea, fecha);
         tareaRepository.save(tarea);
         return tarea;
     }

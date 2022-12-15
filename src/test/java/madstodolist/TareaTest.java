@@ -41,7 +41,7 @@ public class TareaTest {
 
         // WHEN
         // se crea una nueva tarea con ese usuario,
-        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", null);
 
         // THEN
         // el título y el usuario de la tarea son los correctos.
@@ -50,7 +50,7 @@ public class TareaTest {
         assertThat(tarea.getUsuario()).isEqualTo(usuario);
     }
     @Test
-    public void crearTareaWithDate() {
+    public void crearTareaConFecha() {
         // GIVEN
         // Un usuario nuevo creado en memoria, sin conexión con la BD,
         Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
@@ -61,9 +61,6 @@ public class TareaTest {
         Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", date);
 
         // THEN
-        // el título, la fecha y el usuario de la tarea son los correctos.
-        assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
-        assertThat(tarea.getUsuario()).isEqualTo(usuario);
         assertThat(tarea.getFechaFinal()).isEqualTo(LocalDate.parse("2022-12-20"));
     }
 
@@ -78,7 +75,7 @@ public class TareaTest {
         // se crea una tarea de ese usuario,
 
         Set<Tarea> tareas = usuario.getTareas();
-        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", null);
 
         // THEN
         // la tarea creada se ha añadido a la lista de tareas del usuario.
@@ -94,9 +91,9 @@ public class TareaTest {
         // la misma descripción
 
         Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
-        Tarea tarea1 = new Tarea(usuario, "Práctica 1 de MADS");
-        Tarea tarea2 = new Tarea(usuario, "Práctica 1 de MADS");
-        Tarea tarea3 = new Tarea(usuario, "Pagar el alquiler");
+        Tarea tarea1 = new Tarea(usuario, "Práctica 1 de MADS", null);
+        Tarea tarea2 = new Tarea(usuario, "Práctica 1 de MADS", null);
+        Tarea tarea3 = new Tarea(usuario, "Pagar el alquiler", null);
 
         // THEN
         // son iguales (Equal) las tareas que tienen la misma descripción.
@@ -112,9 +109,9 @@ public class TareaTest {
         // con el mismo identificador,
 
         Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
-        Tarea tarea1 = new Tarea(usuario, "Práctica 1 de MADS");
-        Tarea tarea2 = new Tarea(usuario, "Lavar la ropa");
-        Tarea tarea3 = new Tarea(usuario, "Pagar el alquiler");
+        Tarea tarea1 = new Tarea(usuario, "Práctica 1 de MADS", null);
+        Tarea tarea2 = new Tarea(usuario, "Lavar la ropa", null);
+        Tarea tarea3 = new Tarea(usuario, "Pagar el alquiler", null);
         tarea1.setId(1L);
         tarea2.setId(2L);
         tarea3.setId(1L);
@@ -143,7 +140,7 @@ public class TareaTest {
         Usuario usuario = new Usuario("user@ua");
         usuarioRepository.save(usuario);
 
-        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", null);
 
         // WHEN
         // salvamos la tarea en la BD,
@@ -173,7 +170,7 @@ public class TareaTest {
         // y una tarea asociada a ese usuario,
 
         Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
-        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", null);
 
         // WHEN // THEN
         // se lanza una excepción al intentar salvar la tarea en la BD
@@ -192,8 +189,8 @@ public class TareaTest {
         usuarioRepository.save(usuario);
         Long usuarioId = usuario.getId();
 
-        Tarea tarea1 = new Tarea(usuario, "Práctica 1 de MADS");
-        Tarea tarea2 = new Tarea(usuario, "Renovar el DNI");
+        Tarea tarea1 = new Tarea(usuario, "Práctica 1 de MADS", null);
+        Tarea tarea2 = new Tarea(usuario, "Renovar el DNI", null);
         tareaRepository.save(tarea1);
         tareaRepository.save(tarea2);
 
@@ -223,7 +220,7 @@ public class TareaTest {
         // y la salvamos,
 
         Usuario usuarioBD = usuarioRepository.findById(usuarioId).orElse(null);
-        Tarea tarea = new Tarea(usuarioBD, "Práctica 1 de MADS");
+        Tarea tarea = new Tarea(usuarioBD, "Práctica 1 de MADS", null);
         tareaRepository.save(tarea);
         Long tareaId = tarea.getId();
 
@@ -247,7 +244,7 @@ public class TareaTest {
         // Un usuario y una tarea en la base de datos
         Usuario usuario = new Usuario("user@ua");
         usuarioRepository.save(usuario);
-        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", null);
         tareaRepository.save(tarea);
 
         // Recuperamos la tarea
