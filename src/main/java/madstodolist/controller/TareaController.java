@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -70,6 +71,7 @@ public class TareaController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
         model.addAttribute("busca", busca);
+        model.addAttribute("fechaActual", LocalDate.now());
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(idUsuario));
         return "listaTareas";
     }
