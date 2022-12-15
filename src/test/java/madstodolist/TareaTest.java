@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +32,6 @@ public class TareaTest {
     //
     // Tests modelo Tarea en memoria, sin la conexión con la BD
     //
-
     @Test
     public void crearTarea() {
         // GIVEN
@@ -40,7 +41,6 @@ public class TareaTest {
 
         // WHEN
         // se crea una nueva tarea con ese usuario,
-
         Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
 
         // THEN
@@ -48,6 +48,23 @@ public class TareaTest {
 
         assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
         assertThat(tarea.getUsuario()).isEqualTo(usuario);
+    }
+    @Test
+    public void crearTareaWithDate() {
+        // GIVEN
+        // Un usuario nuevo creado en memoria, sin conexión con la BD,
+        Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
+
+        // WHEN
+        // se crea una nueva tarea con ese usuario y fecha,
+        LocalDate date = LocalDate.parse("2022-12-20");
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", date);
+
+        // THEN
+        // el título, la fecha y el usuario de la tarea son los correctos.
+        assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
+        assertThat(tarea.getUsuario()).isEqualTo(usuario);
+        assertThat(tarea.getFechaFinal()).isEqualTo(LocalDate.parse("2022-12-20"));
     }
 
     @Test
