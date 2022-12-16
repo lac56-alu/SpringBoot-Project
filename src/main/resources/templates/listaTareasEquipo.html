@@ -44,7 +44,7 @@
 
     <div class="row mt-3">
         <div class="col">
-            <h2 th:text="'Listado de tareas del Equipo'"></h2>
+            <h2 th:text="'Listado de tareas del Equipo: ' + ${equipo.getNombre()}"></h2>
         </div>
     </div>
 
@@ -56,24 +56,78 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Titulo</th>
-                    <th>Descripcion</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
+                    <th>POR HACER</th>
+                    <th>EN PROCESO</th>
+                    <th>FINALIZADAS</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="tarea: ${tareas}">
-                    <td th:text="${tarea.id}"></td>
-                    <td th:text="${tarea.titulo}"></td>
-                    <td th:text="${tarea.descripcion}"></td>
-                    <td th:text="${tarea.fecha}"></td>
                     <td>
-                        <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
-                        <a class="btn btn-primary btn-xs"
-                           th:href="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Modificar</a>
+                        <div class="card" th:if="${tarea.getEstado() == 'POR_HACER'}" style="width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${tarea.getTitulo()}"></h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <ul class="list-group-item" th:text="'ID: ' + ${tarea.getId()}"></ul>
+                                <li class="list-group-item" th:text="'Descripcion: ' + ${tarea.getDescripcion()}"></li>
+                                <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
+                                <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
+                                <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
+                                <li>
+                                    <a class="btn btn-primary btn-xs"
+                                       th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
+                                    <a class="btn btn-primary btn-xs"
+                                       th:href="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Modificar</a>
+                                    <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                            th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="card" th:if="${tarea.getEstado() == 'EN_PROCESO'}" style="width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${tarea.getTitulo()}"></h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <ul class="list-group-item" th:text="'ID: ' + ${tarea.getId()}"></ul>
+                                <li class="list-group-item" th:text="'Descripcion: ' + ${tarea.getDescripcion()}"></li>
+                                <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
+                                <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
+                                <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
+                                <li>
+                                    <a class="btn btn-primary btn-xs"
+                                       th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
+                                    <a class="btn btn-primary btn-xs"
+                                       th:href="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Modificar</a>
+                                    <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                            th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="card" th:if="${tarea.getEstado() == 'FINALIZADA'}" style="width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${tarea.getTitulo()}"></h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <ul class="list-group-item" th:text="'ID: ' + ${tarea.getId()}"></ul>
+                                <li class="list-group-item" th:text="'Descripcion: ' + ${tarea.getDescripcion()}"></li>
+                                <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
+                                <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
+                                <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
+                                <li>
+                                    <a class="btn btn-primary btn-xs"
+                                       th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
+                                    <a class="btn btn-primary btn-xs"
+                                       th:href="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Modificar</a>
+                                    <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                            th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 </tbody>

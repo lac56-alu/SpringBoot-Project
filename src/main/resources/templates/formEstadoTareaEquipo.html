@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Login')"></head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">MENU</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/about">ToDoList<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/tareas">Tareas</a>
+      </li>
+      <li th:if="${soyadmin}" class="nav-item">
+        <a class="nav-link" href="/registrados">Usuarios</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/equipos">Equipos</a>
+      </li>
+      <li class="nav-item dropleft">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          [[${usuario.nombre}]]
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/cuenta">Cuenta</a>
+          <a class="dropdown-item" href="/logout">
+            Cerrar sesión [[${usuario.nombre}]]
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid">
+
+  <h2 th:text="'Modificar Estado Tarea:' + ${tarea.getTitulo()}"></h2>
+
+  <form method="post" th:action="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.getId()}, idTarea=${tarea.getId()})}" th:object="${estadoTareaEquipoData}">
+    <select id="estado" name="estado" th:field="*{estado}">
+      <option value="POR_HACER">POR HACER</option>
+      <option value="EN_PROCESO">EN PROCESO</option>
+      <option value="FINALIZADA">FINALIZADA</option>
+    </select>
+
+    <button class="btn btn-primary" type="submit">Modificar</button>
+    <a class="btn btn-danger" th:href="@{/equipo/{id}/listaTareas(id=${equipo.getId()})}">Cancelar</a>
+  </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>
