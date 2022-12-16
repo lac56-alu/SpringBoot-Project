@@ -63,13 +63,14 @@ public class TareaService {
     }
 
     @Transactional
-    public Tarea modificaTarea(Long idTarea, String nuevoTitulo) {
+    public Tarea modificaTarea(Long idTarea, String nuevoTitulo, LocalDate fecha) {
         logger.debug("Modificando tarea " + idTarea + " - " + nuevoTitulo);
         Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
         if (tarea == null) {
             throw new TareaServiceException("No existe tarea con id " + idTarea);
         }
         tarea.setTitulo(nuevoTitulo);
+        tarea.setFechaFinal(fecha);
         tareaRepository.save(tarea);
         return tarea;
     }

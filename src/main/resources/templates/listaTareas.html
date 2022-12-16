@@ -62,7 +62,7 @@
                 <input type="submit" class="btn btn-info mb-2" value="Buscar">
                 &nbsp;&nbsp;
                 <input type="button" class="btn btn-secondary mb-2" value="Limpiar" th:onclick="'limpiarDatos(\'/usuarios/'+${usuario.id}+'/tareas'+'\')'">
-                <p th:text="${fechaActual}"></p>
+                <p class="ml-4 mt-2 py-2 px-3 rounded bg-warning" th:text="${fechaActual}"></p>
             </form>
             <br>
             <table class="table table-striped">
