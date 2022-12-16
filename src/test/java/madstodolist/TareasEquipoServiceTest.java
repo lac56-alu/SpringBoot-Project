@@ -135,4 +135,25 @@ public class TareasEquipoServiceTest {
         assertEquals(1,tareas.size());
         assertEquals("Titulo 1",tareas.get(0).getTitulo());
     }
+
+    @Test
+    public void cambiarEstadoTarea() {
+        Long tareaId = addTareasEquipoBD().tareaEquipoId;
+        TareasEquipo tarea = tareasEquipoService.findById(tareaId);
+
+        assertThat(tarea).isNotNull();
+        assertThat(tarea.getEstado()).isEqualTo("POR_HACER");
+
+        tareasEquipoService.modificarEstadoTareaEquipo(tarea.getId(), "EN_PROCESO");
+        tarea = tareasEquipoService.findById(tarea.getId());
+        assertThat(tarea.getEstado()).isEqualTo("EN_PROCESO");
+
+        tareasEquipoService.modificarEstadoTareaEquipo(tarea.getId(), "FINALIZADA");
+        tarea = tareasEquipoService.findById(tarea.getId());
+        assertThat(tarea.getEstado()).isEqualTo("FINALIZADA");
+
+        tareasEquipoService.modificarEstadoTareaEquipo(tarea.getId(), "ACABADA");
+        tarea = tareasEquipoService.findById(tarea.getId());
+        assertThat(tarea.getEstado()).isEqualTo("FINALIZADA");
+    }
 }

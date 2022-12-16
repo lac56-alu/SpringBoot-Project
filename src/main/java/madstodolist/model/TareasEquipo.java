@@ -11,6 +11,12 @@ import java.util.Objects;
 public class TareasEquipo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public enum TareasEquipoStatus {
+        POR_HACER,
+        EN_PROCESO,
+        FINALIZADA;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +28,9 @@ public class TareasEquipo implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private Date fecha;
+
+    @NotNull
+    private String estado;
 
     @NotNull
     @ManyToOne
@@ -36,6 +45,7 @@ public class TareasEquipo implements Serializable {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.estado = TareasEquipoStatus.POR_HACER.toString();
         equipo.getTareas().add(this);
     }
 
@@ -78,6 +88,10 @@ public class TareasEquipo implements Serializable {
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
+
+    public String getEstado() { return estado; }
+
+    public void setEstado(String estado) { this.estado = estado; }
 
     @Override
     public boolean equals(Object o) {

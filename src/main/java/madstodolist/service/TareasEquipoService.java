@@ -80,4 +80,25 @@ public class TareasEquipoService {
     public void guardarTareaEquipo(TareasEquipo tareasEquipo) {
         tareasEquipoRepository.save(tareasEquipo);
     }
+
+    public static boolean contains(String nombre) {
+        for (TareasEquipo.TareasEquipoStatus s : TareasEquipo.TareasEquipoStatus.values()) {
+            if (s.name().equals(nombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    @Transactional
+    public void modificarEstadoTareaEquipo(Long idTarea, String nuevoEstado) {
+        TareasEquipo tarea = tareasEquipoRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareasEquipoServiceException("No existe tarea con ese id");
+        }
+
+        if(contains(nuevoEstado)){
+            tarea.setEstado(nuevoEstado);
+            tareasEquipoRepository.save(tarea);
+        }
+    }
 }

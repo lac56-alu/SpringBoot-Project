@@ -177,4 +177,57 @@ public class TareasEquipoController {
         flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
         return "listaTareasEquipo";
     }
+
+
+    @GetMapping("/equipo/{idEquipo}/modificarEstado/{idTarea}")
+    public String mostrarTareaEstado(@PathVariable(value="idEquipo") Long idEquipo, @PathVariable(value="idTarea") Long idTarea,
+                                    Model model, HttpSession session, EstadoTareaEquipoData estadoTareaEquipoData){
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+
+        TareasEquipo tarea = tareasEquipoService.findById(idTarea);
+        if(tarea == null){
+            throw new TareasEquipoServiceException("Tarea con ese id no encontrada");
+        }
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("tarea", tarea);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
+        return "formEstadoTareaEquipo";
+    }
+
+    @PostMapping("/equipo/{idEquipo}/modificarEstado/{idTarea}")
+    public String modificarEstadoTareaEquipo(@PathVariable(value="idEquipo") Long idEquipo, @PathVariable(value="idTarea") Long idTarea,
+                                       @ModelAttribute EstadoTareaEquipoData estadoTareaEquipoData,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+        comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
+        Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
+        model.addAttribute("usuario", usuario);
+        Equipo equipo = equipoService.findById(idEquipo);
+        if(equipo == null){
+            throw new EquipoServiceException("Equipo con ese id no encontrado");
+        }
+        TareasEquipo tarea = tareasEquipoService.findById(idTarea);
+        if(tarea == null){
+            throw new TareasEquipoServiceException("Tarea con ese id no encontrada");
+        }
+
+        tareasEquipoService.modificarEstadoTareaEquipo(tarea.getId(), estadoTareaEquipoData.getEstado());
+
+        Set<TareasEquipo> tareas =equipoService.findById(equipo.getId()).getTareas();
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("tareas", tareas);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
+        flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
+        return "listaTareasEquipo";
+    }
 }
