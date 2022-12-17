@@ -58,6 +58,7 @@
           <th>Nombre</th>
           <th>FechaNacimiento</th>
           <th th:if="${soyadmin}">Accion</th>
+          <th>Cambiar Rol</th>
           <th>Rol</th>
         </tr>
         </thead>
@@ -69,6 +70,16 @@
           <td th:text="${user.fechaNacimiento}"></td>
           <td th:if="${soyadmin}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                           th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
+          <td>
+            <form method="post" th:action="@{/equipo/{idEquipo}/cambiarRol/${user.id}(idEquipo=${Idequipo})}" th:object="${cambiarRolData}">
+              <select id="estado" name="estado" th:field="*{rol}">
+                <option value="PARTICIPANTE">PARTICIPANTE</option>
+                <option value="GESTOR">GESTOR</option>
+                <option value="LIDER">LIDER</option>
+              </select>
+              <button class="btn btn-primary" type="submit">Modificar</button>
+            </form>
+          </td>
           <td>
             <div th:if="${user.id == lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-primary">LIDER</span></div>
             <div th:if="${user.id != lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-secondary">MIEMBRO</span></div>
