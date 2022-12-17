@@ -17,4 +17,7 @@ public interface DatosEquipoUsuarioRepository extends CrudRepository<DatosEquipo
             " e.usuario.id = ?1 and e.equipo.id = ?2"
     )
     public void modificarRol(Long idU,Long idE,String rol);
+
+    @Query("select e.rol from DatosEquipoUsuario e where e.equipo.id= ?1 and e.usuario.id= ?2")
+    public String tipoRol(Long idE,Long idU);
 }

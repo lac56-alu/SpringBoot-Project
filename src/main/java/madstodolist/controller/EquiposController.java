@@ -56,6 +56,9 @@ public class EquiposController {
         model.addAttribute("pertenecer",this);
         return "listaEquipos";
     }
+    public String tipoRolUsuario(Long idE,Long idU){
+        return equipoService.tipoRol(idE,idU);
+    }
     @GetMapping("/equipos/{id}")
     public String miembrosEquipo(@PathVariable(value="id") Long idEquipo, Model model,@ModelAttribute CambiarRolData cambiarRolData){
         //la primera linea para proteger el equipo
@@ -68,6 +71,7 @@ public class EquiposController {
         model.addAttribute("Idequipo",equipo.getId());
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         model.addAttribute("lider", equipo.getLider());
+        model.addAttribute("tipoRol",this);
         return "miembrosEquipo";
     }
     @PostMapping("/equipos/{id}")

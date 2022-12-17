@@ -110,4 +110,8 @@ public class EquipoService {
     public void modificarRol(Long idE,Long idU,String rol){
         datosEquipoUsuarioRepository.modificarRol(idU,idE,rol);
     }
+    @Transactional(readOnly = true)
+    public String tipoRol(Long idE,Long idU){
+        return datosEquipoUsuarioRepository.tipoRol(idE,idU);
+    }
 }
