@@ -75,7 +75,7 @@
         <th>Enlace Miembros</th>
         <th>Tareas</th>
         <th>Acceso</th>
-
+        <th th:if="${soyadmin}">Accion</th>
       </tr>
       </thead>
       <tbody>
@@ -88,7 +88,10 @@
         <td><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                     th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')'">Eliminarme</button>
         </td>
-
+        <td th:if="${soyadmin}"><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
+          <button th:if="${soyadmin}" class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                  th:onclick="'del(\'/equipos/' + ${equipo.id} + '/eliminar\')'">borrar</button>
+        </td>
       </tr>
       </tbody>
     </table>

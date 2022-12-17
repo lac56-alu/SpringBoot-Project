@@ -184,7 +184,9 @@ public class CuentaUsuarioTest {
                         containsString("Descripcion Equipo 1"),
                         containsString("Descripcion Equipo 2"),
                         containsString("Ver miembros"),
-                        containsString("Ver tareas")
+                        containsString("Ver tareas"),
+                        containsString("editar"),
+                        containsString("borrar")
                 ))));
     }
 }
