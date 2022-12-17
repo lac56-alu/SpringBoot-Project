@@ -1,10 +1,7 @@
 package madstodolist.service;
 
 import madstodolist.controller.exception.EquipoNoNameException;
-import madstodolist.model.Equipo;
-import madstodolist.model.EquipoRepository;
-import madstodolist.model.Tarea;
-import madstodolist.model.Usuario;
+import madstodolist.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +18,8 @@ public class EquipoService {
 
     @Autowired
     EquipoRepository equipoRepository;
+    @Autowired
+    DatosEquipoUsuarioRepository datosEquipoUsuarioRepository;
     @Autowired
     UsuarioService usuarioService;
 
@@ -56,6 +55,8 @@ public class EquipoService {
     public void addUsuarioEquipo(Long idU,Long idE){
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
+        DatosEquipoUsuario d = new DatosEquipoUsuario(usuario,equipo,"PARTICIPANTE");
+        datosEquipoUsuarioRepository.save(d);
         equipo.addUsuario(usuario);
     }
     @Transactional(readOnly = true)
@@ -79,6 +80,7 @@ public class EquipoService {
     public void deleteUsuarioEquipo(Long idU,Long idE){
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
+        datosEquipoUsuarioRepository.eliminar(idU,idE);
         equipo.deleteUsuario(usuario);
     }
     @Transactional

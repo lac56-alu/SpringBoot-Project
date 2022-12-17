@@ -74,12 +74,12 @@ public class EquiposController {
     @ResponseBody
     public String meterme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
         equipoService.addUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
-        return "";
+        return "redirect:/equipos";
     }
     @DeleteMapping("/equipos/{id}")
     public String eliminarme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
         equipoService.deleteUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
-        return "";
+        return "redirect:/equipos";
     }
     @DeleteMapping("/equipos/{id}/{idU}")
     public String eliminar(@PathVariable(value="id") Long idE,@PathVariable(value="idU") Long idU, RedirectAttributes flash, HttpSession session){

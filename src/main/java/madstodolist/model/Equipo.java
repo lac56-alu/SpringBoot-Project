@@ -2,6 +2,7 @@ package madstodolist.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,17 +18,21 @@ public class Equipo implements Serializable {
     private String nombre;
     private String descripcion;
 
+
     private Long lider;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "equipo_usuario",
             joinColumns = { @JoinColumn(name = "fk_equipo") },
-            inverseJoinColumns = {@JoinColumn(name = "fk_usuario")})
+            inverseJoinColumns = {@JoinColumn(name = "fk_usuario")}
+    )
     Set<Usuario> usuarios = new HashSet<>();
 
     @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     Set<TareasEquipo> tareas = new HashSet<>();
 
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    Set<DatosEquipoUsuario> datos = new HashSet<>();
     public Equipo() {}
     public Equipo(String nombre){
         this.nombre = nombre;
