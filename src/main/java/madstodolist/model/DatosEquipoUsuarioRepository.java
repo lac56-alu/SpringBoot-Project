@@ -12,4 +12,9 @@ public interface DatosEquipoUsuarioRepository extends CrudRepository<DatosEquipo
             " e.usuario.id = ?1 and e.equipo.id = ?2"
             )
     public void eliminar(Long idU,Long idE);
+    @Modifying
+    @Query("update DatosEquipoUsuario e set e.rol=?3 where" +
+            " e.usuario.id = ?1 and e.equipo.id = ?2"
+    )
+    public void modificarRol(Long idU,Long idE,String rol);
 }

@@ -71,11 +71,11 @@
           <td th:if="${soyadmin}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                           th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
           <td>
-            <form method="post" th:action="@{/equipo/{idEquipo}/cambiarRol/${user.id}(idEquipo=${Idequipo})}" th:object="${cambiarRolData}">
+            <form method="post" th:action="@{/equipos/{idEquipo}/cambiarRol/{idUS}(idEquipo=${Idequipo},idUS=${user.id})}" th:object="${cambiarRolData}">
               <select id="estado" name="estado" th:field="*{rol}">
                 <option value="PARTICIPANTE">PARTICIPANTE</option>
                 <option value="GESTOR">GESTOR</option>
-                <option value="LIDER">LIDER</option>
+                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
               </select>
               <button class="btn btn-primary" type="submit">Modificar</button>
             </form>

@@ -144,9 +144,9 @@ public class EquiposController {
         return "";
     }
     @PostMapping("/equipos/{idE}/cambiarRol/{idU}")
-    public void CambiarRol(@PathVariable(value="idE") Long idEquipo,@PathVariable(value="idU") Long idUsuario, @ModelAttribute CambiarRolData cambiarRolData,
+    public String CambiarRol(@PathVariable(value="idE") Long idEquipo,@PathVariable(value="idU") Long idUsuario, @ModelAttribute CambiarRolData cambiarRolData,
                            Model model, RedirectAttributes flash, HttpSession session){
-
+        equipoService.modificarRol(idEquipo,idUsuario,cambiarRolData.getRol());
+        return "redirect:/equipos/"+idEquipo;
     }
-
 }

@@ -106,4 +106,8 @@ public class EquipoService {
         }
         return findAllOrderedByName();
     }
+    @Transactional
+    public void modificarRol(Long idE,Long idU,String rol){
+        datosEquipoUsuarioRepository.modificarRol(idU,idE,rol);
+    }
 }
