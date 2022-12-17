@@ -47,8 +47,8 @@ public class MenuWebTest {
        Usuario usuario = new Usuario("user@ua");
        usuario.setPassword("123");
        usuario = usuarioService.registrar(usuario);
-       Tarea tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Lavar coche");
-       tareaService.nuevaTareaUsuario(usuario.getId(), "Renovar DNI");
+       Tarea tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Lavar coche", null);
+       tareaService.nuevaTareaUsuario(usuario.getId(), "Renovar DNI", null);
        return new DosIds(usuario.getId(), tarea1.getId());
    }
     @Test

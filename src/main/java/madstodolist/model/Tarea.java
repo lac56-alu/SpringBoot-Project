@@ -3,6 +3,7 @@ package madstodolist.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +18,7 @@ public class Tarea implements Serializable {
     @NotNull
     private String titulo;
 
+    private LocalDate fechaFinal;
     @NotNull
     // Relación muchos-a-uno entre tareas y usuario
     @ManyToOne
@@ -32,9 +34,12 @@ public class Tarea implements Serializable {
     // Al crear una tarea la asociamos automáticamente a un
     // usuario. Actualizamos por tanto la lista de tareas del
     // usuario.
-    public Tarea(Usuario usuario, String titulo) {
+    //Si una tarea se crea sin fecha, la fecha por defecto será de 1 semana
+
+    public Tarea(Usuario usuario, String titulo, LocalDate fechaFinal) {
         this.usuario = usuario;
         this.titulo = titulo;
+        this.fechaFinal = fechaFinal;
         usuario.getTareas().add(this);
     }
 
@@ -62,7 +67,8 @@ public class Tarea implements Serializable {
         this.usuario = usuario;
     }
 
-
+    public LocalDate getFechaFinal() { return this.fechaFinal; }
+    public void setFechaFinal(LocalDate fechaFinal) { this.fechaFinal = fechaFinal; }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

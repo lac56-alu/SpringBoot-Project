@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -55,7 +57,7 @@ public class TareaController {
         comprobarUsuarioLogeado(idUsuario);
 
         Usuario usuario = usuarioService.findById(idUsuario);
-        tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo());
+        tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo(), tareaData.getFechaFinal());
         flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/tareas";
      }
@@ -67,9 +69,11 @@ public class TareaController {
 
         Usuario usuario = usuarioService.findById(idUsuario);
         List<Tarea> tareas = tareaService.allTareasUsuario(idUsuario,busca);
+        LocalDate fechaActual = LocalDate.now();
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
         model.addAttribute("busca", busca);
+        model.addAttribute("fechaActual", fechaActual);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(idUsuario));
         return "listaTareas";
     }
@@ -102,7 +106,7 @@ public class TareaController {
 
         comprobarUsuarioLogeado(idUsuario);
 
-        tareaService.modificaTarea(idTarea, tareaData.getTitulo());
+        tareaService.modificaTarea(idTarea, tareaData.getTitulo(), tareaData.getFechaFinal());
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
         return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
     }
