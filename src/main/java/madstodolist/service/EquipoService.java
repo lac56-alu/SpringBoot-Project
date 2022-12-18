@@ -32,6 +32,8 @@ public class EquipoService {
         Usuario usuario = usuarioService.findById(lider);
         equipo.addUsuario(usuario);
         equipoRepository.save(equipo);
+        DatosEquipoUsuario d = new DatosEquipoUsuario(usuario,equipo,"LIDER");
+        datosEquipoUsuarioRepository.save(d);
         return equipo;
     }
     @Transactional(readOnly = true)
@@ -55,7 +57,14 @@ public class EquipoService {
     public void addUsuarioEquipo(Long idU,Long idE){
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
-        DatosEquipoUsuario d = new DatosEquipoUsuario(usuario,equipo,"PARTICIPANTE");
+        String tipoRol = "";
+        if(equipo.getLider() == idU){
+            tipoRol = "LIDER";
+        }
+        else{
+            tipoRol = "PARTICIPANTE";
+        }
+        DatosEquipoUsuario d = new DatosEquipoUsuario(usuario,equipo,tipoRol);
         datosEquipoUsuarioRepository.save(d);
         equipo.addUsuario(usuario);
     }

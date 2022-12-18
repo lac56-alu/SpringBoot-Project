@@ -39,7 +39,14 @@ public class TareasEquipoController {
         if (!idUsuario.equals(idUsuarioLogeado))
             throw new UsuarioNoAdminException();
     }
-
+    public boolean soyParticipante(Long idE,Long idU){
+        String tipo = equipoService.tipoRol(idE,idU);
+        boolean tipoR=false;
+        if(tipo.equals("PARTICIPANTE")){
+            tipoR=true;
+        }
+        return tipoR;
+    }
     @GetMapping("/equipo/{id}/listaTareas")
     public String listaTareasEquipo(@PathVariable(value="id") Long idEquipo, Model model, HttpSession session){
         //la primera linea para proteger el equipo
@@ -53,6 +60,7 @@ public class TareasEquipoController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("equipo", equipo);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("tipoSoy",this);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "listaTareasEquipo";
     }

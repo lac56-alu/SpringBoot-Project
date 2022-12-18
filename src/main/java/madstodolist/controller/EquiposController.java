@@ -59,6 +59,17 @@ public class EquiposController {
     public String tipoRolUsuario(Long idE,Long idU){
         return equipoService.tipoRol(idE,idU);
     }
+    public boolean soyAdminORLider(Long idE,Long idU,Long idL){
+        String tipo = equipoService.tipoRol(idE,idU);
+        boolean tipoR=false;
+        if(tipo == null){
+            return tipoR;
+        }
+        if(tipo.equals("ADMINISTRADOR") || idU == idL){
+            tipoR=true;
+        }
+        return tipoR;
+    }
     @GetMapping("/equipos/{id}")
     public String miembrosEquipo(@PathVariable(value="id") Long idEquipo, Model model,@ModelAttribute CambiarRolData cambiarRolData){
         //la primera linea para proteger el equipo
@@ -115,7 +126,6 @@ public class EquiposController {
         if (equipo == null) {
             throw new EquipoNotFoundException();
         }
-        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
         model.addAttribute("equipo", equipo);
         equipoData.setNombre(equipo.getNombre());
         equipoData.setDescripcion(equipo.getDescripcion());
@@ -129,8 +139,6 @@ public class EquiposController {
         if (equipo == null) {
             throw new EquipoNotFoundException();
         }
-        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
-
         equipoService.modificarEquipo(equipo, equipoData.getNombre(), equipoData.getDescripcion());
         flash.addFlashAttribute("mensaje", "Equipo modificado correctamente");
         return "redirect:/equipos";
@@ -142,8 +150,6 @@ public class EquiposController {
         if (equipo == null) {
             throw new EquipoNotFoundException();
         }
-        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
-
         equipoService.eliminarEquipo(equipo);
         return "";
     }
