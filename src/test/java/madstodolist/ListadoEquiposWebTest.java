@@ -55,7 +55,6 @@ public class ListadoEquiposWebTest {
                         containsString("Descripcion Equipo 2")
                 ))));
     }
-    
     @Test
     public void listaEquiposBuscados()throws Exception{
         Usuario us = new Usuario("user@ua");

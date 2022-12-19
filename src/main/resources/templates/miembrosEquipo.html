@@ -59,7 +59,7 @@
           <th>FechaNacimiento</th>
           <th>Rol</th>
           <th th:if="${tipoRol.soyAdminORLider(Idequipo,usuario.id,lider)}">Cambiar Rol</th>
-          <th th:if="${soyadmin}">Accion</th>
+          <th th:if="${soyadmin || tipoRol.soyAdminORLider(Idequipo,usuario.id,lider)}">Accion</th>
         </tr>
         </thead>
         <tbody>
@@ -82,7 +82,7 @@
               <button class="btn btn-primary" type="submit">Modificar</button>
             </form>
           </td>
-          <td th:if="${soyadmin && user.id != usuario.id}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+          <td th:if="${(soyadmin || tipoRol.soyAdminORLider(Idequipo,usuario.id,lider)) && user.id != usuario.id}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                           th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
         </tr>
         </tbody>
