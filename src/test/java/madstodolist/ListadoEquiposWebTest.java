@@ -101,7 +101,7 @@ public class ListadoEquiposWebTest {
                         containsString("user@ua"),
                         containsString("user2@ua"),
                         containsString("LIDER"),
-                        containsString("MIEMBRO")
+                        containsString("PARTICIPANTE")
                 ))));
     }
 

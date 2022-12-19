@@ -1,5 +1,6 @@
 package madstodolist.service;
 
+import madstodolist.model.DatosEquipoUsuarioRepository;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.model.UsuarioRepository;
@@ -27,6 +28,8 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    DatosEquipoUsuarioRepository datosEquipoUsuarioRepository;
     @Autowired
     private JavaMailSender correo;
 
@@ -213,6 +216,7 @@ public class UsuarioService {
         if(idUsuarioBorrar != idUsuarioRegistrado){
             throw new UsuarioServiceException("No se puede borrar un usuario que no sea propio...");
         }
+        datosEquipoUsuarioRepository.eliminarRelacionadoUsuario(idUsuarioRegistrado);
         usuarioRepository.deleteById(idUsuarioRegistrado);
     }
     @Transactional(readOnly = false)

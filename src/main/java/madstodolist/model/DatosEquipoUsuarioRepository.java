@@ -13,6 +13,16 @@ public interface DatosEquipoUsuarioRepository extends CrudRepository<DatosEquipo
             )
     public void eliminar(Long idU,Long idE);
     @Modifying
+    @Query("delete from DatosEquipoUsuario e where" +
+            " e.equipo.id = ?1"
+    )
+    public void eliminarRelacionadoEquipo(Long idE);
+    @Modifying
+    @Query("delete from DatosEquipoUsuario e where" +
+            " e.usuario.id = ?1"
+    )
+    public void eliminarRelacionadoUsuario(Long idU);
+    @Modifying
     @Query("update DatosEquipoUsuario e set e.rol=?3 where" +
             " e.usuario.id = ?1 and e.equipo.id = ?2"
     )

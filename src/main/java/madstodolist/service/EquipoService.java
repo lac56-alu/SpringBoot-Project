@@ -97,6 +97,7 @@ public class EquipoService {
         if(equipo == null) {
             throw new EquipoServiceException("No existe equipo con id " + equipo.getId());
         }
+        datosEquipoUsuarioRepository.eliminarRelacionadoEquipo(equipo.getId());
         equipoRepository.delete(equipo);
     }
     @Transactional

@@ -42,6 +42,9 @@ public class TareasEquipoController {
     public boolean soyParticipante(Long idE,Long idU){
         String tipo = equipoService.tipoRol(idE,idU);
         boolean tipoR=false;
+        if(tipo == null){
+            return tipoR;
+        }
         if(tipo.equals("PARTICIPANTE")){
             tipoR=true;
         }
