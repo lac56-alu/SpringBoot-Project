@@ -32,3 +32,8 @@ Podremos acceder al tablero donde se especificar√°n las funcionalidades y tambi√
 ```
 https://trello.com/b/ttq9LH9s/pr%C3%A1ctica-5
 ```
+
+La imagen de docker del proyecto la podemos encontrar aqui:
+```
+https://hub.docker.com/repository/docker/alejandrocompany/mads-todolist
+```
