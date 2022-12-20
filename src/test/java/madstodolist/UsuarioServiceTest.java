@@ -25,6 +25,7 @@ public class UsuarioServiceTest {
         Usuario usuario = new Usuario("user@ua");
         usuario.setNombre("Usuario Ejemplo");
         usuario.setPassword("123");
+        usuario.setEnabled(true);
         usuario = usuarioService.registrar(usuario);
         return usuario.getId();
     }
@@ -155,5 +156,40 @@ public class UsuarioServiceTest {
         assertThat(usuario.getId()).isEqualTo(usuarioId);
         assertThat(usuario.getEmail()).isEqualTo("user@ua");
         assertThat(usuario.getNombre()).isEqualTo("Usuario Ejemplo");
+    }
+
+    @Test
+    public void modificarUsuarioTest(){
+        Long idUsuarioModificar = addUsuarioBD();
+
+        Usuario usuario = new Usuario("modificar@gmail.com");
+        usuario.setNombre("Modificar");
+        usuario.setPassword("1234");
+        usuario = usuarioService.registrar(usuario);
+
+        usuarioService.modificarUsuario(idUsuarioModificar, usuario);
+
+        Usuario usuarioModificado = usuarioService.findById(idUsuarioModificar);
+
+        assertThat(usuarioModificado.getEmail()).isEqualTo("modificar@gmail.com");
+        assertThat(usuarioModificado.getNombre()).isEqualTo("Modificar");
+        assertThat(usuarioModificado.getPassword()).isEqualTo("1234");
+    }
+
+    @Test
+    public void borrarUsuarioTest(){
+        Long idUsuarioBorrar = addUsuarioBD();
+
+        usuarioService.borrarUsuario(idUsuarioBorrar, idUsuarioBorrar);
+        try{
+            usuarioService.borrarUsuario(idUsuarioBorrar, idUsuarioBorrar+1);
+        }
+        catch(Exception exception){
+            assertThat(exception.getMessage()).isEqualTo("No se puede borrar un usuario que no sea propio...");
+        }
+
+        Usuario usuarioBorrado = usuarioService.findById(idUsuarioBorrar);
+
+        assertThat(usuarioBorrado).isNull();
     }
 }

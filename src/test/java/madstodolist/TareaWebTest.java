@@ -53,8 +53,8 @@ public class TareaWebTest {
         Usuario usuario = new Usuario("user@ua");
         usuario.setPassword("123");
         usuario = usuarioService.registrar(usuario);
-        Tarea tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Lavar coche");
-        tareaService.nuevaTareaUsuario(usuario.getId(), "Renovar DNI");
+        Tarea tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Lavar coche", null);
+        tareaService.nuevaTareaUsuario(usuario.getId(), "Renovar DNI", null);
         return new DosIds(usuario.getId(), tarea1.getId());
     }
 
@@ -195,5 +195,25 @@ public class TareaWebTest {
 
         this.mockMvc.perform(get(urlListado))
                 .andExpect(content().string(containsString("Limpiar cristales coche")));
+    }
+    @Test
+    public void listaTareasBuscadas()throws Exception{
+        DosIds dosIds = addUsuarioTareasBD();
+        Long usuarioId = dosIds.usuarioId;
+        Long tareaLavarCocheId = dosIds.tareaId;
+        when(managerUserSession.usuarioLogeado()).thenReturn(usuarioId);
+        String url = "/usuarios/"+usuarioId+"/tareas";
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("Buscar"),
+                        containsString("Limpiar")
+                ))));
+        this.mockMvc.perform(get(url+"?busca="+"Lavar"))
+                .andExpect((content().string(allOf(
+                        containsString("Buscar"),
+                        containsString("Limpiar"),
+                        containsString("Lavar coche")
+                ))));
     }
 }

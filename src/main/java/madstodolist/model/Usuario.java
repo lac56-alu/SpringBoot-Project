@@ -23,6 +23,10 @@ public class Usuario implements Serializable {
     private String password;
     private boolean administrador;
     private boolean acceso=true;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    private boolean enabled=false;
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
@@ -32,10 +36,12 @@ public class Usuario implements Serializable {
     // toda su lista de tareas
     // CUIDADO!! No es recomendable hacerlo en aquellos casos en los
     // que la relación pueda traer a memoria una gran cantidad de entidades
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     Set<Tarea> tareas = new HashSet<>();
 
-    @ManyToMany(mappedBy = "usuarios",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    Set<DatosEquipoUsuario> datos = new HashSet<>();
+    @ManyToMany(mappedBy = "usuarios",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     Set<Equipo> equipos = new HashSet<>();
     // Constructor vacío necesario para JPA/Hibernate.
     // No debe usarse desde la aplicación.
@@ -88,6 +94,13 @@ public class Usuario implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean getEnabled(){return enabled;}
+    public void setEnabled(boolean enabled){this.enabled = enabled;}
+    public String getVerificationCode(){return verificationCode;}
+    public void setVerificationCode(String verificacionCode){
+        this.verificationCode = verificacionCode;
     }
 
     public Date getFechaNacimiento() {

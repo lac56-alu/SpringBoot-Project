@@ -27,3 +27,8 @@ $ java -jar target/mads-todolist-inicial-0.0.1-SNAPSHOT.jar
 Una vez lanzada la aplicación puedes abrir un navegador y probar la página de inicio:
 
 - [http://localhost:8080/login](http://localhost:8080/login)
+
+Podremos acceder al tablero donde se especificarán las funcionalidades y también donde se mostrará la evolución temporal del proyecto:
+```
+https://trello.com/b/ttq9LH9s/pr%C3%A1ctica-5
+```

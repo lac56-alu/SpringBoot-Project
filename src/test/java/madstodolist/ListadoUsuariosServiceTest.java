@@ -1,5 +1,6 @@
 package madstodolist;
 
+import madstodolist.model.Equipo;
 import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
@@ -33,5 +35,15 @@ public class ListadoUsuariosServiceTest {
         assertEquals("prueba01@ua",users.get(0).getEmail());
         assertEquals("prueba02@ua",users.get(1).getEmail());
 
+    }
+    @Test
+    public void buscarUsuario(){
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario.setAdministrador(true);
+        usuarioService.registrar(usuario);
+        List<Usuario>users = usuarioService.busquedaUser(null);
+        assertEquals(1,users.size());
+        assertEquals("user@ua",users.get(0).getEmail());
     }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="fragments :: header(usuario=${usuario})"></div>
+<div class="container-fluid">
+
+    <h2 th:text="'Modificar Tarea: ' + ${tarea.titulo}"></h2>
+
+    <form method="post" th:action="@{/equipo/{idEquipo}/modificarTarea/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}" th:object="${tareasEquipoData}">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="titulo">Titulo:</label>
+                <input class="form-control" id="titulo" name="titulo" th:placeholder="${tarea.titulo}" required th:field="*{titulo}" type="text"/>
+
+                <label for="descripcion">Descripcion:</label>
+                <input class="form-control" id="descripcion" name="descripcion" th:placeholder="${tarea.descripcion}" required th:field="*{descripcion}" type="text"/>
+
+                <label for="fecha">Fecha:</label>
+                <input id="fecha" class="form-control" name="fecha" th:placeholder="${tarea.fecha}" required th:field="*{fecha}"/>
+            </div>
+            <button class="btn btn-primary" type="submit">Modificar tarea</button>
+            <a class="btn btn-danger" th:href="@{/equipo/{idEquipo}/listaTareas(idEquipo=${equipo.id})}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+</body>
+</html>

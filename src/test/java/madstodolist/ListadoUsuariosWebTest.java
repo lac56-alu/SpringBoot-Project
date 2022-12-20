@@ -1,6 +1,7 @@
 package madstodolist;
 
 import madstodolist.authentication.ManagerUserSession;
+import madstodolist.model.Equipo;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.service.TareaService;
@@ -50,6 +51,30 @@ public class ListadoUsuariosWebTest {
                         containsString("1"),
                         containsString("prueba01@ua"),
                         containsString("2")
+                ))));
+    }
+    @Test
+    public void listaUsersBuscados()throws Exception{
+        Usuario us = new Usuario("user@ua");
+        us.setPassword("123");
+        us.setAdministrador(true);
+        us = usuarioService.registrar(us);
+        Usuario us2 = new Usuario("user2@ua");
+        us2.setPassword("123");
+        us2 = usuarioService.registrar(us2);
+        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
+        String url = "/registrados";
+
+        this.mockMvc.perform(get(url))
+                .andExpect((content().string(allOf(
+                        containsString("Buscar"),
+                        containsString("Limpiar")
+                ))));
+        this.mockMvc.perform(get(url+"?busca="+"user2"))
+                .andExpect((content().string(allOf(
+                        containsString("Buscar"),
+                        containsString("Limpiar"),
+                        containsString("user2")
                 ))));
     }
 

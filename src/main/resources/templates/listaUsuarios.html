@@ -6,40 +6,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">MENU</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/about">ToDoList<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/tareas">Tareas</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Usuarios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/equipos">Equipos</a>
-            </li>
-            <li class="nav-item dropleft">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    [[${usuario.nombre}]]
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Cuenta</a>
-                    <a class="dropdown-item" href="/logout">
-                        Cerrar sesión [[${usuario.nombre}]]
-                    </a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="fragments :: header(usuario=${usuario})"></div>
 <div class="container-fluid">
 
     <div class="row mt-3">
@@ -50,6 +17,20 @@
 
     <div class="row mt-3">
         <div class="col">
+            <form class="form-inline" th:action="@{/registrados}">
+                <div class="form-group mb-2">
+                    <label>Filtros  </label>
+                </div>
+                &nbsp;&nbsp;
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" name="busca" class="form-control" id="busca" th:value="${busca}" placeholder="Introduce para buscar" required>
+                </div>
+                &nbsp;&nbsp;
+                <input type="submit" class="btn btn-info mb-2" value="Buscar">
+                &nbsp;&nbsp;
+                <input type="button" class="btn btn-secondary mb-2" value="Limpiar" onclick="limpiarDatos()">
+            </form>
+            <br>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -103,6 +84,9 @@
                 method: 'POST'
             }).then((res) => location.reload());
         }
+    }
+    function limpiarDatos(){
+        window.location='/registrados';
     }
 </script>
 </body>

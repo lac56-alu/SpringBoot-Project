@@ -56,7 +56,7 @@ public class ListadoEquiposWebTest {
                 ))));
     }
     @Test
-    public void listaMiembros()throws Exception{
+    public void listaEquiposBuscados()throws Exception{
         Usuario us = new Usuario("user@ua");
         us.setPassword("123");
         us.setAdministrador(true);
@@ -68,63 +68,18 @@ public class ListadoEquiposWebTest {
         Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
         equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
         equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
-        String url = "/equipos/"+equipo.getId();
+        String url = "/equipos";
 
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
-                        containsString("user@ua"),
-                        containsString("user2@ua")
+                        containsString("Buscar"),
+                        containsString("Limpiar")
                 ))));
-    }
-
-    @Test
-    public void listaMiembrosConRol()throws Exception{
-        //Creamos el usuario 1.
-        Usuario us = new Usuario("user@ua");
-        us.setPassword("123");
-        us.setAdministrador(true);
-        us = usuarioService.registrar(us);
-
-        //Creamos el usuario 2.
-        Usuario us2 = new Usuario("user2@ua");
-        us2.setPassword("123");
-        us2 = usuarioService.registrar(us2);
-
-        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
-        equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
-        equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
-        String url = "/equipos/"+equipo.getId();
-
-        this.mockMvc.perform(get(url))
+        this.mockMvc.perform(get(url+"?busca="+equipo.getNombre()))
                 .andExpect((content().string(allOf(
-                        containsString("user@ua"),
-                        containsString("user2@ua"),
-                        containsString("LIDER"),
-                        containsString("MIEMBRO")
-                ))));
-    }
-
-    @Test
-    public void listaMiembrosExpulsar()throws Exception{
-        Usuario us = new Usuario("user@ua");
-        us.setPassword("123");
-        us.setAdministrador(true);
-        us = usuarioService.registrar(us);
-        Usuario us2 = new Usuario("user2@ua");
-        us2.setPassword("123");
-        us2 = usuarioService.registrar(us2);
-        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        Equipo equipo= equipoService.crearEquipo("Equipo1", "Descripcion Equipo 1", us.getId());
-        equipoService.addUsuarioEquipo(us.getId(),equipo.getId());
-        equipoService.addUsuarioEquipo(us2.getId(),equipo.getId());
-        String url = "/equipos/"+equipo.getId();
-
-        this.mockMvc.perform(get(url))
-                .andExpect((content().string(allOf(
-                        containsString("user@ua"),
-                        containsString("user2@ua"),
-                        containsString("Expulsar")
+                        containsString("Buscar"),
+                        containsString("Limpiar"),
+                        containsString("Equipo1")
                 ))));
     }
 }

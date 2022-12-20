@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,26 +26,33 @@ public class TareaService {
     private TareaRepository tareaRepository;
 
     @Transactional
-    public Tarea nuevaTareaUsuario(Long idUsuario, String tituloTarea) {
+    public Tarea nuevaTareaUsuario(Long idUsuario, String tituloTarea, LocalDate fecha) {
         logger.debug("Añadiendo tarea " + tituloTarea + " al usuario " + idUsuario);
         Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
         if (usuario == null) {
             throw new TareaServiceException("Usuario " + idUsuario + " no existe al crear tarea " + tituloTarea);
         }
-        Tarea tarea = new Tarea(usuario, tituloTarea);
+
+        Tarea tarea = new Tarea(usuario, tituloTarea, fecha);
         tareaRepository.save(tarea);
         return tarea;
     }
 
     @Transactional(readOnly = true)
-    public List<Tarea> allTareasUsuario(Long idUsuario) {
+    public List<Tarea> allTareasUsuario(Long idUsuario,String busca) {
         logger.debug("Devolviendo todas las tareas del usuario " + idUsuario);
         Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
         if (usuario == null) {
             throw new TareaServiceException("Usuario " + idUsuario + " no existe al listar tareas ");
         }
+
+
         List<Tarea> tareas = new ArrayList(usuario.getTareas());
         Collections.sort(tareas, (a, b) -> a.getId() < b.getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
+
+        if(busca!=null){
+            return tareaRepository.busqueda(busca,idUsuario);
+        }
         return tareas;
     }
 
@@ -55,13 +63,14 @@ public class TareaService {
     }
 
     @Transactional
-    public Tarea modificaTarea(Long idTarea, String nuevoTitulo) {
+    public Tarea modificaTarea(Long idTarea, String nuevoTitulo, LocalDate fecha) {
         logger.debug("Modificando tarea " + idTarea + " - " + nuevoTitulo);
         Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
         if (tarea == null) {
             throw new TareaServiceException("No existe tarea con id " + idTarea);
         }
         tarea.setTitulo(nuevoTitulo);
+        tarea.setFechaFinal(fecha);
         tareaRepository.save(tarea);
         return tarea;
     }

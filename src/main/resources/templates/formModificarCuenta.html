@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="fragments :: header(usuario=${usuario})"></div>
+
+<div class="container-fluid">
+
+  <h2 th:text="'Modificar Usuario: ' + ${usuario.getNombre()}"></h2>
+
+  <form method="post" th:action="@{/cuenta/modificar/{id}(id=${usuario.id})}" th:object="${usuarioData}">
+    <div class="col-6">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input class="form-control" id="nombre" name="nombre" required th:field="*{nombre}" type="text"/>
+
+        <label for="email">Email:</label>
+        <input class="form-control" id="email" name="email" required th:field="*{email}" type="text"/>
+
+        <label for="password">Password:</label>
+        <input class="form-control" id="password" name="password" required th:field="*{password}" type="password"/>
+
+        <label for="fechaNacimiento">Fecha de nacimiento</label>
+        <input id="fechaNacimiento" class="form-control" name="fechaNacimiento" placeholder="01-12-2019" th:field="*{fechaNacimiento}"/>
+      </div>
+      <button class="btn btn-primary" type="submit">Modificar cuenta</button>
+      <a class="btn btn-danger" href="/cuenta">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+</body>
+</html>

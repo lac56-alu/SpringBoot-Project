@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Login')"></head>
+
+<body>
+<div th:replace="fragments :: header(usuario=${usuario})"></div>
+<div class="container-fluid">
+
+  <h2 th:text="'Modificar Estado Tarea:' + ${tarea.getTitulo()}"></h2>
+
+  <form method="post" th:action="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.getId()}, idTarea=${tarea.getId()})}" th:object="${estadoTareaEquipoData}">
+    <select id="estado" name="estado" th:field="*{estado}">
+      <option value="POR_HACER">POR HACER</option>
+      <option value="EN_PROCESO">EN PROCESO</option>
+      <option value="FINALIZADA">FINALIZADA</option>
+    </select>
+
+    <button class="btn btn-primary" type="submit">Modificar</button>
+    <a class="btn btn-danger" th:href="@{/equipo/{id}/listaTareas(id=${equipo.getId()})}">Cancelar</a>
+  </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>

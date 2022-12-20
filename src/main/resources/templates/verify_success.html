@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+<div th:replace="fragments :: header(usuario=${usuario})"></div>
+<div class="container-fluid">
+  <div class="container-fluid">
+    <h1>ToDoList</h1>
+    <div class="container text-center">
+      <h3>Enhorabuena tu cuenta ha sido verificada.</h3>
+      <h4><a href="/login">Ya puede iniciar sesion</a></h4>
+    </div>
+  </div>
+
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>
