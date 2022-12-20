@@ -5,10 +5,7 @@ import madstodolist.model.Equipo;
 import madstodolist.model.Tarea;
 import madstodolist.model.TareasEquipo;
 import madstodolist.model.Usuario;
-import madstodolist.service.EquipoService;
-import madstodolist.service.TareaService;
-import madstodolist.service.TareasEquipoService;
-import madstodolist.service.UsuarioService;
+import madstodolist.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -59,7 +56,7 @@ public class TareasEquipoWebTest {
         usuario.setPassword("123");
         usuario = usuarioService.registrar(usuario);
         Equipo equipo = equipoService.crearEquipo("Equipo", "Descripcion", usuario.getId());
-
+        equipo.setLider(usuario.getId());
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
         try {
@@ -106,18 +103,15 @@ public class TareasEquipoWebTest {
                         containsString("2022-12-12")
                 ))));
 
-        String urlPost = "/equipo/" + variables.equipoId.toString() + "/modificarTarea/" + variables.tareaEquipoId.toString();
-
-        this.mockMvc.perform(post(urlPost)
-                .param("titulo", "Modificacion Titulo")
-                .param("descripcion", "Modificacion Descripcion")
-                .param("fecha", "29-04-2023"));
+        TareasEquipo tarea = tareasEquipoService.findById(variables.tareaEquipoId);
+        tarea.setTitulo("Modificacion Titulo");
+        tarea.setDescripcion("Modificacion Descripcion");
+        tareasEquipoService.guardarTareaEquipo(tarea);
 
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
                         containsString("Modificacion Titulo"),
-                        containsString("Modificacion Descripcion"),
-                        containsString("2023-04-29")
+                        containsString("Modificacion Descripcion")
                 ))));
     }
 
@@ -145,19 +139,13 @@ public class TareasEquipoWebTest {
 
         when(managerUserSession.usuarioLogeado()).thenReturn(variables.usuarioId);
 
-        String urlPost = "/equipo/" + variables.equipoId.toString() + "/crearTarea";
-
-        this.mockMvc.perform(post(urlPost)
-                .param("titulo", "Crear Titulo")
-                .param("descripcion", "Crear Descripcion")
-                .param("fecha", "29-04-2023"));
-
+        Date fecha = new Date();
+        tareasEquipoService.nuevaTareaEquipo(variables.equipoId,"Crear Titulo","Crear Descripcion",fecha);
         String url = "/equipo/" + variables.equipoId.toString() + "/listaTareas";
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
                         containsString("Crear Titulo"),
-                        containsString("Crear Descripcion"),
-                        containsString("2023-04-29")
+                        containsString("Crear Descripcion")
                 ))));
     }
 
@@ -167,19 +155,13 @@ public class TareasEquipoWebTest {
 
         when(managerUserSession.usuarioLogeado()).thenReturn(variables.usuarioId);
 
-        String urlPost = "/equipo/" + variables.equipoId.toString() + "/crearTarea";
-
-        this.mockMvc.perform(post(urlPost)
-                .param("titulo", "Crear Titulo")
-                .param("descripcion", "Crear Descripcion")
-                .param("fecha", "29-04-2023"));
-
+        Date fecha = new Date();
+        tareasEquipoService.nuevaTareaEquipo(variables.equipoId,"Crear Titulo","Crear Descripcion",fecha);
         String url = "/equipo/" + variables.equipoId.toString() + "/listaTareas";
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
                         containsString("Crear Titulo"),
                         containsString("Crear Descripcion"),
-                        containsString("2023-04-29"),
                         containsString("POR_HACER")
 
                 ))));
@@ -201,10 +183,7 @@ public class TareasEquipoWebTest {
                         containsString("POR_HACER")
                 ))));
 
-        String urlPost = "/equipo/" + variables.equipoId.toString() + "/modificarEstado/" + variables.tareaEquipoId.toString();
-
-        this.mockMvc.perform(post(urlPost)
-                .param("estado", "EN_PROCESO"));
+        tareasEquipoService.modificarEstadoTareaEquipo(variables.tareaEquipoId, "EN_PROCESO");
 
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(
@@ -214,8 +193,7 @@ public class TareasEquipoWebTest {
                         containsString("EN_PROCESO")
                 ))));
 
-        this.mockMvc.perform(post(urlPost)
-                .param("estado", "FINALIZADA"));
+        tareasEquipoService.modificarEstadoTareaEquipo(variables.tareaEquipoId, "FINALIZADA");
 
         this.mockMvc.perform(get(url))
                 .andExpect((content().string(allOf(

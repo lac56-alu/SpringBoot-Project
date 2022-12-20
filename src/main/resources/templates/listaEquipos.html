@@ -71,9 +71,9 @@
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Enlace Miembros</th>
-                    <th>Tareas</th>
                     <th>Acceso</th>
-                    <th th:if="${soyadmin}">Accion</th>
+                    <th>Tareas</th>
+                    <th>Accion</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -82,16 +82,18 @@
                     <td th:text="${equipo.nombre}"></td>
                     <td th:text="${equipo.descripcion}"></td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}(id=${equipo.id})}"/>Ver miembros</a></td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{/equipo/{id}/listaTareas(id=${equipo.id})}"/>Ver tareas</a></td>
                     <td><button th:if="${pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                                               th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')'">Eliminarme</button>
+                                th:onclick="'eliminarme(\'/equipos/' + ${equipo.id} + '\')'">Eliminarme</button>
                         <button th:if="${!pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}" class="btn btn-success btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'meterme(\'/equipos/' + ${equipo.id} + '\')'">Añadirme</button>
                     </td>
-                    <td th:if="${soyadmin}"><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
+                    <td th:if="${pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}"><a class="btn btn-primary btn-xs" th:href="@{/equipo/{id}/listaTareas(id=${equipo.id})}"/>Ver tareas</a></td>
+                    <td th:if="${!pertenecer.pertenezcoAlEquipo(usuario.id,equipo.id)}"></td>
+                    <td th:if="${soyadmin || usuario.id == equipo.lider}"><a class="btn btn-primary btn-xs" th:href="@{/equipos/{id}/editar(id=${equipo.id})}"/>editar</a>
                         <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                 th:onclick="'del(\'/equipos/' + ${equipo.id} + '/eliminar\')'">borrar</button>
                     </td>
+                    <td th:if="${!soyadmin && usuario.id != equipo.lider}"></td>
                 </tr>
                 </tbody>
             </table>

@@ -57,8 +57,9 @@
           <th>Email</th>
           <th>Nombre</th>
           <th>FechaNacimiento</th>
-          <th th:if="${soyadmin}">Accion</th>
           <th>Rol</th>
+          <th th:if="${tipoRol.soyAdminORLider(Idequipo,usuario.id,lider)}">Cambiar Rol</th>
+          <th th:if="${soyadmin || tipoRol.soyAdminORLider(Idequipo,usuario.id,lider)}">Accion</th>
         </tr>
         </thead>
         <tbody>
@@ -67,12 +68,22 @@
           <td th:text="${user.email}"></td>
           <td th:text="${user.nombre}"></td>
           <td th:text="${user.fechaNacimiento}"></td>
-          <td th:if="${soyadmin}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                          th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
           <td>
             <div th:if="${user.id == lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-primary">LIDER</span></div>
-            <div th:if="${user.id != lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-secondary">MIEMBRO</span></div>
+            <div th:if="${user.id != lider}"><span class="font-weight-bold py-2 px-3 badge badge-pill badge-secondary">[[${tipoRol.tipoRolUsuario(Idequipo,user.id)}]]</span></div>
           </td>
+          <td th:if="${tipoRol.soyAdminORLider(Idequipo,usuario.id,lider) && user.id != usuario.id && user.id != lider}">
+            <form method="post" th:action="@{/equipos/{idEquipo}/cambiarRol/{idUS}(idEquipo=${Idequipo},idUS=${user.id})}" th:object="${cambiarRolData}">
+              <select id="estado" name="estado" th:field="*{rol}">
+                <option value="PARTICIPANTE">PARTICIPANTE</option>
+                <option value="GESTOR">GESTOR</option>
+                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+              </select>
+              <button class="btn btn-primary" type="submit">Modificar</button>
+            </form>
+          </td>
+          <td th:if="${(soyadmin || tipoRol.soyAdminORLider(Idequipo,usuario.id,lider)) && user.id != usuario.id}"><button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                          th:onclick="'eliminar(\'/equipos/'+ ${Idequipo}+'/'+${user.id} + '\')'">Expulsar</button></td>
         </tr>
         </tbody>
       </table>

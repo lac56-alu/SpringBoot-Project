@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
@@ -113,31 +114,17 @@ public class GestionEquipoWebTest {
     }
     @Test
     public void borrarEquipo()throws Exception{
-        Usuario us = new Usuario("user@ua");
-        us.setPassword("123");
-        us.setAdministrador(true);
-        us = usuarioService.registrar(us);
-        when(managerUserSession.usuarioLogeado()).thenReturn(us.getId());
-        String url = "/equipos/nuevo";
-        this.mockMvc.perform(post(url)
-                        .param("nombre", "EquipoNew")
-                        .param("descripcion", "DescripcionNew"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/equipos"));
-
-        this.mockMvc.perform(get("/equipos"))
-                .andExpect((content().string(allOf(
-                        containsString("EquipoNew"),
-                        containsString("DescripcionNew"),
-                        containsString("editar"),
-                        containsString("borrar")
-                ))));
-        List<Equipo>equipos = equipoService.findAllOrderedByName();
-        this.mockMvc.perform(delete("/equipos/"+equipos.get(0).getId()+"/eliminar"))
-                .andExpect(status().isOk());
+        Usuario usuario = new Usuario("user@ua");
+        usuario.setPassword("123");
+        usuario = usuarioService.registrar(usuario);
+        Equipo eq = equipoService.crearEquipo("EquipoNuevo", "Descripcion Equipo", usuario.getId());
+        Equipo EB= equipoService.recuperarEquipo(eq.getId());
+        assertThat(EB).isNotNull();
+        equipoService.eliminarEquipo(eq);
+        when(managerUserSession.usuarioLogeado()).thenReturn(usuario.getId());
         this.mockMvc.perform(get("/equipos"))
                 .andExpect((content().string(
-                        (not(containsString("EquipoNew")
+                        (not(containsString("EquipoNuevo")
                         )))));
     }
 }

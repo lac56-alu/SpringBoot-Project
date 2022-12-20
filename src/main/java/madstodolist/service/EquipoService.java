@@ -1,10 +1,7 @@
 package madstodolist.service;
 
 import madstodolist.controller.exception.EquipoNoNameException;
-import madstodolist.model.Equipo;
-import madstodolist.model.EquipoRepository;
-import madstodolist.model.Tarea;
-import madstodolist.model.Usuario;
+import madstodolist.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +19,8 @@ public class EquipoService {
     @Autowired
     EquipoRepository equipoRepository;
     @Autowired
+    DatosEquipoUsuarioRepository datosEquipoUsuarioRepository;
+    @Autowired
     UsuarioService usuarioService;
 
     @Transactional
@@ -33,6 +32,8 @@ public class EquipoService {
         Usuario usuario = usuarioService.findById(lider);
         equipo.addUsuario(usuario);
         equipoRepository.save(equipo);
+        DatosEquipoUsuario d = new DatosEquipoUsuario(usuario,equipo,"LIDER");
+        datosEquipoUsuarioRepository.save(d);
         return equipo;
     }
     @Transactional(readOnly = true)
@@ -56,6 +57,15 @@ public class EquipoService {
     public void addUsuarioEquipo(Long idU,Long idE){
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
+        String tipoRol = "";
+        if(equipo.getLider() == idU){
+            tipoRol = "LIDER";
+        }
+        else{
+            tipoRol = "PARTICIPANTE";
+        }
+        DatosEquipoUsuario d = new DatosEquipoUsuario(usuario,equipo,tipoRol);
+        datosEquipoUsuarioRepository.save(d);
         equipo.addUsuario(usuario);
     }
     @Transactional(readOnly = true)
@@ -79,6 +89,7 @@ public class EquipoService {
     public void deleteUsuarioEquipo(Long idU,Long idE){
         Equipo equipo = this.recuperarEquipo(idE);
         Usuario usuario = usuarioService.findById(idU);
+        datosEquipoUsuarioRepository.eliminar(idU,idE);
         equipo.deleteUsuario(usuario);
     }
     @Transactional
@@ -86,6 +97,7 @@ public class EquipoService {
         if(equipo == null) {
             throw new EquipoServiceException("No existe equipo con id " + equipo.getId());
         }
+        datosEquipoUsuarioRepository.eliminarRelacionadoEquipo(equipo.getId());
         equipoRepository.delete(equipo);
     }
     @Transactional
@@ -103,5 +115,13 @@ public class EquipoService {
             return equipoRepository.busqueda(busca);
         }
         return findAllOrderedByName();
+    }
+    @Transactional
+    public void modificarRol(Long idE,Long idU,String rol){
+        datosEquipoUsuarioRepository.modificarRol(idU,idE,rol);
+    }
+    @Transactional(readOnly = true)
+    public String tipoRol(Long idE,Long idU){
+        return datosEquipoUsuarioRepository.tipoRol(idE,idU);
     }
 }

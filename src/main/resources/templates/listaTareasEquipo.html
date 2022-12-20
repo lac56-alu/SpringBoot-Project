@@ -51,7 +51,7 @@
     <div class="row mt-3">
         <div class="col">
             <br>
-            <a role="button" class="btn btn-success" th:href="@{/equipo/{idEquipo}/crearTarea(idEquipo=${equipo.id})}">Crear Tarea</a>
+            <a th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}" role="button" class="btn btn-success" th:href="@{/equipo/{idEquipo}/crearTarea(idEquipo=${equipo.id})}">Crear Tarea</a>
             <br>
             <table class="table table-striped">
                 <thead>
@@ -74,7 +74,7 @@
                                 <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
                                 <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
                                 <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
-                                <li>
+                                <li th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}">
                                     <a class="btn btn-primary btn-xs"
                                        th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
                                     <a class="btn btn-primary btn-xs"
@@ -82,6 +82,7 @@
                                     <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                             th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                                 </li>
+                                <li th:if="${tipoSoy.soyParticipante(equipo.id,usuario.id)}"></li>
                             </ul>
                         </div>
                     </td>
@@ -96,7 +97,7 @@
                                 <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
                                 <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
                                 <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
-                                <li>
+                                <li th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}">
                                     <a class="btn btn-primary btn-xs"
                                        th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
                                     <a class="btn btn-primary btn-xs"
@@ -104,6 +105,7 @@
                                     <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                             th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                                 </li>
+                                <li th:if="${tipoSoy.soyParticipante(equipo.id,usuario.id)}"></li>
                             </ul>
                         </div>
                     </td>
@@ -118,7 +120,7 @@
                                 <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
                                 <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
                                 <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
-                                <li>
+                                <li th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}">
                                     <a class="btn btn-primary btn-xs"
                                        th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
                                     <a class="btn btn-primary btn-xs"
@@ -126,6 +128,7 @@
                                     <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                             th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                                 </li>
+                                <li th:if="${tipoSoy.soyParticipante(equipo.id,usuario.id)}"></li>
                             </ul>
                         </div>
                     </td>
