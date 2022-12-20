@@ -118,6 +118,7 @@ public class TareasEquipoController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("equipo", equipo);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("tipoSoy",this);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
         return "listaTareasEquipo";
@@ -144,6 +145,7 @@ public class TareasEquipoController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("equipo", equipo);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("tipoSoy",this);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         return "listaTareasEquipo";
     }
@@ -184,6 +186,7 @@ public class TareasEquipoController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("equipo", equipo);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("tipoSoy",this);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
         flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
         return "listaTareasEquipo";
@@ -237,6 +240,7 @@ public class TareasEquipoController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("equipo", equipo);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("tipoSoy",this);
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
         return "listaTareasEquipo";
