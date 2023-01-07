@@ -45,6 +45,7 @@ public class ListadoUsuariosController {
         model.addAttribute("usuarios",usuarios);
         model.addAttribute("busca", busca);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
         return "listaUsuarios";
     }
     @PutMapping("/registrados/{id}")

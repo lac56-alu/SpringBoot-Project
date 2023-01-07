@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,8 +47,8 @@ public class TareaServiceTest {
         Usuario usuario = new Usuario("user@ua");
         usuario.setPassword("123");
         usuario = usuarioService.registrar(usuario);
-        Tarea tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Lavar coche");
-        tareaService.nuevaTareaUsuario(usuario.getId(), "Renovar DNI");
+        Tarea tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Lavar coche", null);
+        tareaService.nuevaTareaUsuario(usuario.getId(), "Renovar DNI", null);
         return new DosIds(usuario.getId(), tarea1.getId());
     }
 
@@ -59,7 +61,7 @@ public class TareaServiceTest {
 
         // WHEN
         // creamos una nueva tarea asociada al usuario,
-        Tarea tarea = tareaService.nuevaTareaUsuario(usuarioId, "Práctica 1 de MADS");
+        Tarea tarea = tareaService.nuevaTareaUsuario(usuarioId, "Práctica 1 de MADS", null);
 
         // THEN
         // al recuperar el usuario usando el método findByEmail la tarea creada
@@ -68,6 +70,22 @@ public class TareaServiceTest {
         Usuario usuario = usuarioService.findByEmail("user@ua");
         assertThat(usuario.getTareas()).hasSize(3);
         assertThat(usuario.getTareas()).contains(tarea);
+    }
+
+    @Test
+    public void testNuevaTareaUsuarioConFecha() {
+        // GIVEN
+        // Un usuario en la BD
+
+        Long usuarioId = addUsuarioTareasBD().usuarioId;
+
+        // WHEN
+        // creamos una nueva tarea asociada al usuario,
+        Tarea tarea = tareaService.nuevaTareaUsuario(usuarioId, "Práctica 1 de MADS", LocalDate.parse("2022-12-20"));
+        // THEN
+        // al recuperar el usuario usando el método findByEmail la tarea creada
+        // está en la lista de tareas del usuario.
+        assertThat(tarea.getFechaFinal()).isEqualTo(LocalDate.parse("2022-12-20"));
     }
 
     @Test
@@ -101,7 +119,7 @@ public class TareaServiceTest {
         // WHEN
         // modificamos la tarea correspondiente a ese identificador,
 
-        tareaService.modificaTarea(tareaId, "Limpiar los cristales del coche");
+        tareaService.modificaTarea(tareaId, "Limpiar los cristales del coche", null);
 
         // THEN
         // al buscar por el identificador en la base de datos se devuelve la tarea modificada

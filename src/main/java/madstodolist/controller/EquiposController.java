@@ -56,8 +56,22 @@ public class EquiposController {
         model.addAttribute("pertenecer",this);
         return "listaEquipos";
     }
+    public String tipoRolUsuario(Long idE,Long idU){
+        return equipoService.tipoRol(idE,idU);
+    }
+    public boolean soyAdminORLider(Long idE,Long idU,Long idL){
+        String tipo = equipoService.tipoRol(idE,idU);
+        boolean tipoR=false;
+        if(tipo == null){
+            return tipoR;
+        }
+        if(tipo.equals("ADMINISTRADOR") || idU == idL){
+            tipoR=true;
+        }
+        return tipoR;
+    }
     @GetMapping("/equipos/{id}")
-    public String miembrosEquipo(@PathVariable(value="id") Long idEquipo, Model model){
+    public String miembrosEquipo(@PathVariable(value="id") Long idEquipo, Model model,@ModelAttribute CambiarRolData cambiarRolData){
         //la primera linea para proteger el equipo
         comprobarUsuarioLogeado(managerUserSession.usuarioLogeado());
         Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
@@ -68,18 +82,19 @@ public class EquiposController {
         model.addAttribute("Idequipo",equipo.getId());
         model.addAttribute("soyadmin",usuarioService.soyAdministrador(usuario.getId()));
         model.addAttribute("lider", equipo.getLider());
+        model.addAttribute("tipoRol",this);
         return "miembrosEquipo";
     }
     @PostMapping("/equipos/{id}")
     @ResponseBody
     public String meterme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
         equipoService.addUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
-        return "";
+        return "redirect:/equipos";
     }
     @DeleteMapping("/equipos/{id}")
     public String eliminarme(@PathVariable(value="id") Long idE, RedirectAttributes flash, HttpSession session){
         equipoService.deleteUsuarioEquipo(managerUserSession.usuarioLogeado(),idE);
-        return "";
+        return "redirect:/equipos";
     }
     @DeleteMapping("/equipos/{id}/{idU}")
     public String eliminar(@PathVariable(value="id") Long idE,@PathVariable(value="idU") Long idU, RedirectAttributes flash, HttpSession session){
@@ -111,7 +126,6 @@ public class EquiposController {
         if (equipo == null) {
             throw new EquipoNotFoundException();
         }
-        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
         model.addAttribute("equipo", equipo);
         equipoData.setNombre(equipo.getNombre());
         equipoData.setDescripcion(equipo.getDescripcion());
@@ -125,8 +139,6 @@ public class EquiposController {
         if (equipo == null) {
             throw new EquipoNotFoundException();
         }
-        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
-
         equipoService.modificarEquipo(equipo, equipoData.getNombre(), equipoData.getDescripcion());
         flash.addFlashAttribute("mensaje", "Equipo modificado correctamente");
         return "redirect:/equipos";
@@ -138,9 +150,13 @@ public class EquiposController {
         if (equipo == null) {
             throw new EquipoNotFoundException();
         }
-        comprobarUsuarioAdmin(usuarioService.devolverIDAdministrador());
-
         equipoService.eliminarEquipo(equipo);
         return "";
+    }
+    @PostMapping("/equipos/{idE}/cambiarRol/{idU}")
+    public String CambiarRol(@PathVariable(value="idE") Long idEquipo,@PathVariable(value="idU") Long idUsuario, @ModelAttribute CambiarRolData cambiarRolData,
+                           Model model, RedirectAttributes flash, HttpSession session){
+        equipoService.modificarRol(idEquipo,idUsuario,cambiarRolData.getRol());
+        return "redirect:/equipos/"+idEquipo;
     }
 }

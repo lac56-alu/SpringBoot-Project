@@ -6,40 +6,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">MENU</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/about">ToDoList<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Tareas</a>
-            </li>
-            <li th:if="${soyadmin}" class="nav-item">
-                <a class="nav-link" href="/registrados">Usuarios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/equipos">Equipos</a>
-            </li>
-            <li class="nav-item dropleft">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    [[${usuario.nombre}]]
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/cuenta">Cuenta</a>
-                    <a class="dropdown-item" href="/logout">
-                        Cerrar sesión [[${usuario.nombre}]]
-                    </a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="fragments :: header(usuario=${usuario})"></div>
 <div class="container-fluid">
 
     <div class="row mt-3">
@@ -51,7 +18,7 @@
     <div class="row mt-3">
         <div class="col">
             <br>
-            <a role="button" class="btn btn-success" th:href="@{/equipo/{idEquipo}/crearTarea(idEquipo=${equipo.id})}">Crear Tarea</a>
+            <a th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}" role="button" class="btn btn-success" th:href="@{/equipo/{idEquipo}/crearTarea(idEquipo=${equipo.id})}">Crear Tarea</a>
             <br>
             <table class="table table-striped">
                 <thead>
@@ -74,7 +41,7 @@
                                 <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
                                 <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
                                 <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
-                                <li>
+                                <li th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}">
                                     <a class="btn btn-primary btn-xs"
                                        th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
                                     <a class="btn btn-primary btn-xs"
@@ -82,6 +49,7 @@
                                     <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                             th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                                 </li>
+                                <li th:if="${tipoSoy.soyParticipante(equipo.id,usuario.id)}"></li>
                             </ul>
                         </div>
                     </td>
@@ -96,7 +64,7 @@
                                 <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
                                 <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
                                 <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
-                                <li>
+                                <li th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}">
                                     <a class="btn btn-primary btn-xs"
                                        th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
                                     <a class="btn btn-primary btn-xs"
@@ -104,6 +72,7 @@
                                     <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                             th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                                 </li>
+                                <li th:if="${tipoSoy.soyParticipante(equipo.id,usuario.id)}"></li>
                             </ul>
                         </div>
                     </td>
@@ -118,7 +87,7 @@
                                 <li class="list-group-item" th:text="'Fecha: ' + ${tarea.getFecha()}"></li>
                                 <li class="list-group-item" th:text="'Equipo: ' + ${tarea.getEquipo().getNombre()}"></li>
                                 <li class="list-group-item" th:text="'Estado: ' + ${tarea.getEstado()}"></li>
-                                <li>
+                                <li th:if="${!tipoSoy.soyParticipante(equipo.id,usuario.id)}">
                                     <a class="btn btn-primary btn-xs"
                                        th:href="@{/equipo/{idEquipo}/modificarEstado/{idTarea}(idEquipo=${equipo.id},idTarea=${tarea.id})}">Cambiar Estado</a>
                                     <a class="btn btn-primary btn-xs"
@@ -126,6 +95,7 @@
                                     <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                                             th:onclick="'del(\'/equipo/' + ${equipo.id} + '/borrarTarea/' + ${tarea.id} + '\')'">Borrar</button>
                                 </li>
+                                <li th:if="${tipoSoy.soyParticipante(equipo.id,usuario.id)}"></li>
                             </ul>
                         </div>
                     </td>

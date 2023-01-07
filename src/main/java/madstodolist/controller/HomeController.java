@@ -17,13 +17,13 @@ public class HomeController {
     UsuarioService usuarioService;
     @GetMapping("/about")
     public String about(Model model) {
-        if(managerUserSession.usuarioLogeado()==null){
-            return "aboutNoLogueado";
-        }
-        else{
+        if(managerUserSession.usuarioLogeado() != null){
             Usuario usuario = usuarioService.findById(managerUserSession.usuarioLogeado());
             model.addAttribute("usuario", usuario);
             model.addAttribute("soyadmin",usuarioService.soyAdministrador(managerUserSession.usuarioLogeado()));
+            return "about";
+        }
+        else{
             return "about";
         }
     }
