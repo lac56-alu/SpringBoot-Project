@@ -20,6 +20,9 @@ ALTER TABLE public.usuarios
 ADD COLUMN enabled boolean NOT NULL,
 ADD COLUMN verification_code character varying(64);
 
+ALTER TABLE public.tareas
+ADD COLUMN fecha_final date;
+
 CREATE TABLE public.tareasequipo (
     id bigint NOT NULL,
     descripcion character varying(255) NOT NULL,

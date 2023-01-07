@@ -108,6 +108,7 @@ ALTER SEQUENCE public.equipos_id_seq OWNED BY public.equipos.id;
 
 CREATE TABLE public.tareas (
     id bigint NOT NULL,
+    fecha_final date,
     titulo character varying(255) NOT NULL,
     usuario_id bigint NOT NULL
 );
